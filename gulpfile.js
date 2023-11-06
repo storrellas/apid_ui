@@ -24,11 +24,12 @@ function serve() {
       ui: { port: 8081 },
       port: 8080
   });
-
+  gulp.watch('./public/static/css/*.css').on('change', styles);
+  gulp.watch('./public/static/js/*.js').on('change', script);
   gulp.watch("./public/*.html").on('change', browserSync.reload);
 }
 
-function compile() {
+function script() {
   
   return browserify({
           'entries': ['./public/static/js/main.js'],
@@ -45,35 +46,8 @@ function compile() {
         .pipe(plugins().sourcemaps.init({'loadMaps': true}))
         .pipe(plugins().sourcemaps.write('.'))
         // Start piping stream to tasks!
-        .pipe(gulp.dest('public/build/js/'));
-
-    
-  // return browserify({
-  //     'entries': ['./public/static/js/main.js'],
-  //     'debug': true,
-  //     'transform': [
-  //         babelify.configure({
-  //             'presets': ['es2015', 'react']
-  //         })
-  //     ]
-  //   })
-  //   .bundle()
-  //   .on('error', function () {
-  //       var args = Array.prototype.slice.call(arguments);
-
-  //       plugins().notify.onError({
-  //           'title': 'Compile Error',
-  //           'message': '<%= error.message %>'
-  //       }).apply(this, args);
-
-  //       this.emit('end');
-  //   })
-  //   .pipe(source('bundle.js'))
-  //   .pipe(buffer())
-  //   .pipe(plugins().sourcemaps.init({'loadMaps': true}))
-  //   .pipe(plugins().sourcemaps.write('.'))
-  //   .pipe(gulp.dest('./build/js/'))
-  //    .pipe(browserSync.stream());
+        .pipe(gulp.dest('public/build/js/'))
+        .pipe(browserSync.reload({stream: true}));
 }
 
 function styles() {
@@ -83,12 +57,14 @@ function styles() {
           // .pipe(plugins().sass().on('error', plugins().sass.logError))
           .pipe(plugins().sourcemaps.write())
           .pipe(gulp.dest('public/build/css/'))
+          .pipe(browserSync.reload({stream: true}));
 }
 
 // Static Server + watching scss/html files
-exports.serve = serve;
+exports.serve = gulp.series(styles, script, serve);
 // Static Server + watching scss/html files
-exports.compile = gulp.series(styles, compile);
+exports.compile = gulp.series(styles, script);
+
 
 // Default task
-exports.default = serve;
+exports.default = gulp.series(styles, script, serve);

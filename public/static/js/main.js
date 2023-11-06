@@ -1,9 +1,12 @@
 
 // import 'https://unpkg.com/react@18/umd/react.production.min.js';
 // import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
+// import '/vendor/axios/dist/axios.min.js';
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios/dist/axios';
+
 
 
 const AUTHOR = { ME: 'ME', BOT: 'BOT' } 
@@ -86,7 +89,6 @@ const AppId = () => {
             </section>  
 
             <section className={getClass()} style={{ maxWidth: "90%", maxHeight: "90%", zIndex: "100"}}>
-
               <div className='appid-d-flex appid-align-items-center'>
                 <div className='appid-flex-grow-1 appid-text-center'>
                   <img src="/static/img/logo.png" height={40} width={130} alt=''></img>
@@ -102,7 +104,6 @@ const AppId = () => {
                   </div>
                   <div style={{ textAlign:'justify' }} key={idx}>{item.message}</div>
                 </div>)}
-
               </div>
               {loading?
               <div className="appid-d-flex appid-justify-content-end appid-align-items-end">
@@ -143,7 +144,7 @@ const myInitCode = () => {
 
   // inject CSS files
   injectCSSFiles('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css')
-  injectCSSFiles('/build/css/appid.css')
+  injectCSSFiles('/static/css/appid.css')
 
 
   // Creating container

@@ -39053,6 +39053,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; } // import 'https://unpkg.com/react@18/umd/react.production.min.js';
 // import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
+// import '/vendor/axios/dist/axios.min.js';
 var AUTHOR = {
   ME: 'ME',
   BOT: 'BOT'
@@ -39265,7 +39266,7 @@ var injectCSSFiles = function injectCSSFiles(href) {
 var myInitCode = function myInitCode() {
   // inject CSS files
   injectCSSFiles('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
-  injectCSSFiles('/build/css/appid.css');
+  injectCSSFiles('/static/css/appid.css');
 
   // Creating container
   var appIdContainer = document.createElement('div');
