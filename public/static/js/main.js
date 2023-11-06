@@ -1,5 +1,4 @@
 
-import '/vendor/jquery/dist/jquery.min.js';
 import 'https://unpkg.com/react@18/umd/react.production.min.js';
 import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
 import '/vendor/axios/dist/axios.min.js';
@@ -90,7 +89,7 @@ const AppId = () => {
                 <div className='flex-grow-1 text-center'>
                   <img src="/static/img/logo.png" height={40} width={130} alt=''></img>
                 </div>
-                <i class="fa fa-times" aria-hidden="true"></i>
+                <i class="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
               </div>
               <div className='flex-grow-1 mt-3 mb-3 rcv-msg-container' style={{ overflowY: 'auto'}}>
                 
