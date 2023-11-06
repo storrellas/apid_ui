@@ -1,6 +1,9 @@
-import gulp from 'gulp';
-import browserSync from 'browser-sync';
-import browserify from 'browserify';
+// import gulp from 'gulp';
+// import browserSync from 'browser-sync';
+// import browserify from 'browserify';
+const gulp = require('gulp');
+const browserSync = require('browser-sync');
+const browserify = require('browserify');
 browserSync.create();
 
 // See: https://gist.github.com/marceloogeda/5a449caa50462ab2667540a93d34009f
@@ -28,7 +31,9 @@ function compile() {
         'entries': ['./public/static/js/main.js'],
         'debug': true,
     })
-    .transform("babelify", {presets: ["@babel/preset-env", "@babel/preset-react"]})
+    .transform("babelify", {
+      presets: ["@babel/preset-env", "@babel/preset-react"]
+    })
     .bundle().pipe(process.stdout);
   // return new Promise(function(resolve, reject) {
   //   console.log("HTTP Server Started");

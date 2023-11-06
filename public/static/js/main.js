@@ -1,7 +1,9 @@
 
-import 'https://unpkg.com/react@18/umd/react.production.min.js';
-import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
-import '/vendor/axios/dist/axios.min.js';
+// import 'https://unpkg.com/react@18/umd/react.production.min.js';
+// import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import axios from 'axios/dist/axios';
 
 
 const AUTHOR = { ME: 'ME', BOT: 'BOT' } 
