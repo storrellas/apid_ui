@@ -127,15 +127,30 @@ const AppId = () => {
 // *******************
 // AppID Entry point
 // *******************
+const injectCSSFiles = (href) => {
+  const head  = document.getElementsByTagName('head')[0];
+  const linkFontawesome  = document.createElement('link');
+  linkFontawesome.rel  = 'stylesheet';
+  linkFontawesome.type = 'text/css';
+  linkFontawesome.href = href;
+  linkFontawesome.media = 'all';
+  head.appendChild(linkFontawesome);
+}
+
 const myInitCode = () => {
 
-  // Creating container
-  var iDiv = document.createElement('div');
-  iDiv.id = 'apid';
-  iDiv.className = 'apid';
-  document.getElementsByTagName('body')[0].appendChild(iDiv);
+  // inject CSS files
+  injectCSSFiles('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css')
+  injectCSSFiles('/static/css/appid.css')
 
-  
+
+  // Creating container
+  const appIdContainer = document.createElement('div');
+  appIdContainer.id = 'apid';
+  appIdContainer.className = 'apid';
+  document.getElementsByTagName('body')[0].appendChild(appIdContainer);
+
+  // Rendering appID
   const root = ReactDOM.createRoot(document.querySelector('#apid'));
   root.render(<AppId />);
 

@@ -25,7 +25,6 @@
 }
 
 /* Scroll */
-
 .rcv-msg-container::-webkit-scrollbar {
   width: 0.5em;
 
@@ -98,6 +97,7 @@
   }
 }
 
+/* Bootstrap like CSS */
 .appid-d-flex{
   display: flex;
 }
@@ -139,4 +139,7 @@
 }
 .appid-pe-2{
   padding-right: 1em;
+}
+[role=button] {
+  cursor: pointer;
 }
