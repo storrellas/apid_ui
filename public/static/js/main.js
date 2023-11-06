@@ -37,9 +37,6 @@ const AppId = () => {
     const response = await axios.post(`${base_url}/api/chat`, body)    
     const json_response = response.data.data.attributes
     messageListLocal.push({author: AUTHOR.BOT, message: json_response.body, name: json_response.name})
-    
-    // messageListLocal.push({author: AUTHOR.BOT, message: "ISay"})
-    // console.log("messageListLocalAfter ", messageList)
 
     setMessageList(messageListLocal)
     setLoading(false)
@@ -129,11 +126,9 @@ const AppId = () => {
 }
 
 
-$(document).ready( () => {
-  console.log("jquery document is ready")
+const myInitCode = () => {
 
-
-  console.log("Rendering react")
+  // Creating container
   var iDiv = document.createElement('div');
   iDiv.id = 'apid';
   iDiv.className = 'apid';
@@ -143,4 +138,10 @@ $(document).ready( () => {
   const root = ReactDOM.createRoot(document.querySelector('#apid'));
   root.render(<AppId />);
 
-})
+}
+
+// See: https://stackoverflow.com/questions/39993676/code-inside-domcontentloaded-event-not-working
+if (document.readyState !== 'loading')  myInitCode();
+else document.addEventListener('DOMContentLoaded', () => myInitCode() );
+
+
