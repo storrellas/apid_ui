@@ -4,6 +4,7 @@
 const gulp = require('gulp');
 const browserSync = require('browser-sync');
 const browserify = require('browserify');
+const source = require('vinyl-source-stream');
 browserSync.create();
 
 // See: https://gist.github.com/marceloogeda/5a449caa50462ab2667540a93d34009f
@@ -28,17 +29,20 @@ function serve() {
 function compile() {
   
   return browserify({
-        'entries': ['./public/static/js/main.js'],
-        'debug': true,
-    })
-    .transform("babelify", {
-      presets: ["@babel/preset-env", "@babel/preset-react"]
-    })
-    .bundle().pipe(process.stdout);
-  // return new Promise(function(resolve, reject) {
-  //   console.log("HTTP Server Started");
-  //   resolve();
-  // });
+          'entries': ['./public/static/js/main.js'],
+          'debug': true,
+        })
+        .transform("babelify", {
+          presets: ["@babel/preset-env", "@babel/preset-react"]
+        })
+        // Bundle sources
+        .bundle()
+        // Pass desired output filename to vinyl-source-stream
+        .pipe(source('bundle.js'))
+        // Start piping stream to tasks!
+        .pipe(gulp.dest('public/build/'));
+
+    
   // return browserify({
   //     'entries': ['./public/static/js/main.js'],
   //     'debug': true,

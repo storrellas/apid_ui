@@ -2,7 +2,7 @@
 // import 'https://unpkg.com/react@18/umd/react.production.min.js';
 // import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import axios from 'axios/dist/axios';
 
 
@@ -91,7 +91,7 @@ const AppId = () => {
                 <div className='appid-flex-grow-1 appid-text-center'>
                   <img src="/static/img/logo.png" height={40} width={130} alt=''></img>
                 </div>
-                <i class="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
+                <i className="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
               </div>
               <div className='appid-flex-grow-1 appid-mt-3 appid-mb-3 rcv-msg-container' style={{ overflowY: 'auto'}}>
                 
@@ -116,7 +116,7 @@ const AppId = () => {
                   onKeyDown={(e) => onKeyDownMessage(e)}/>
                 
                 <div className="appid-d-flex appid-align-items-center input-msg-enter"  role='button' onClick={() => onClickSendMessage()}>
-                  <i class="fa fa-square-caret-right" aria-hidden="true"></i>                  
+                  <i className="fa fa-square-caret-right" aria-hidden="true"></i>                  
                 </div>
 
               </div>
