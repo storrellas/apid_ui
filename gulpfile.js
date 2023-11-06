@@ -16,3 +16,6 @@ function serve() {
 
 // Static Server + watching scss/html files
 exports.serve = serve;
+
+
+exports.default = serve;
