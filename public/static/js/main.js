@@ -65,37 +65,37 @@ const AppId = () => {
   const getClass = () => {
 
     if( showChat === true )
-      return 'show-chat d-flex flex-column chat-container'
+      return 'show-chat appid-d-flex appid-flex-column chat-container'
 
     if( showChat === false ){
       if (showHideChat === true){
-        return 'hide-chat d-flex flex-column chat-container'
+        return 'hide-chat appid-d-flex appid-flex-column chat-container'
       }else{
-        return 'd-none'
+        return 'appid-d-none'
       }
     }
   }
 
 
   return <div style={{ position: 'relative' }}>
-            <section role="button" className={showChat?'d-none':'chat-icon'}
+            <section role="button" className={showChat?'appid-d-none':'chat-icon'}
               onClick={() => setShowChat(true)} style={{ zIndex: "100" }}>
               <img src="/static/img/logomin.png" alt=""></img>
             </section>  
 
             <section className={getClass()} style={{ maxWidth: "90%", maxHeight: "90%", zIndex: "100"}}>
 
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 text-center'>
+              <div className='appid-d-flex appid-align-items-center'>
+                <div className='appid-flex-grow-1 appid-text-center'>
                   <img src="/static/img/logo.png" height={40} width={130} alt=''></img>
                 </div>
                 <i class="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
               </div>
-              <div className='flex-grow-1 mt-3 mb-3 rcv-msg-container' style={{ overflowY: 'auto'}}>
+              <div className='appid-flex-grow-1 appid-mt-3 appid-mb-3 rcv-msg-container' style={{ overflowY: 'auto'}}>
                 
                 {messageList.map( (item,idx) =>
-                <div key={idx} className='mt-3 pe-2'>
-                  <div className={`w-100 ${item.author === AUTHOR.BOT?'text-end':'text-start'}`}>
+                <div key={idx} className='appid-mt-3 appid-pe-2'>
+                  <div className={`w-100 ${item.author === AUTHOR.BOT?'appid-text-end':'appid-text-start'}`}>
                     <b>{item.name} says:</b>
                   </div>
                   <div style={{ textAlign:'justify' }} key={idx}>{item.message}</div>
@@ -103,17 +103,17 @@ const AppId = () => {
 
               </div>
               {loading?
-              <div className="d-flex justify-content-end align-items-end">
+              <div className="appid-d-flex appid-justify-content-end appid-align-items-end">
                 <img src="/static/img/spinner.svg" alt="" style={{ height: '60px'}}></img>
               </div>
               :null}
-              <div className='d-flex align-items-center justify-content-center input-msg-container'>
+              <div className='appid-d-flex appid-align-items-center appid-justify-content-center input-msg-container'>
                 <input value={message}
                   className="input-msg" type="text" 
                   onChange={(e) => setMessage(e.target.value)} 
                   onKeyDown={(e) => onKeyDownMessage(e)}/>
                 
-                <div className="d-flex align-items-center input-msg-enter"  role='button' onClick={() => onClickSendMessage()}>
+                <div className="appid-d-flex appid-align-items-center input-msg-enter"  role='button' onClick={() => onClickSendMessage()}>
                   <i class="fa fa-square-caret-right" aria-hidden="true"></i>                  
                 </div>
 
