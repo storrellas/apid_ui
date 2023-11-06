@@ -124,7 +124,9 @@ const AppId = () => {
         </div>
 }
 
-
+// *******************
+// AppID Entry point
+// *******************
 const myInitCode = () => {
 
   // Creating container
