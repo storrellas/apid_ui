@@ -143,7 +143,7 @@ const myInitCode = () => {
 
   // inject CSS files
   injectCSSFiles('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css')
-  injectCSSFiles('/static/css/appid.css')
+  injectCSSFiles('/build/css/appid.css')
 
 
   // Creating container
