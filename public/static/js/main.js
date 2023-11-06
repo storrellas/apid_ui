@@ -2,7 +2,7 @@
 import '/vendor/jquery/dist/jquery.min.js';
 import 'https://unpkg.com/react@18/umd/react.production.min.js';
 import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
-// import ReactDOM from '/vendor/react-dom/client';
+import '/vendor/axios/dist/axios.min.js';
 
 
 const AUTHOR = { ME: 'ME', BOT: 'BOT' } 
