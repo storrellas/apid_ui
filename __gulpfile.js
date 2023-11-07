@@ -24,8 +24,8 @@ function serve() {
       ui: { port: 8081 },
       port: 8080
   });
-  gulp.watch('./public/static/css/*.css').on('change', styles);
-  gulp.watch('./public/static/js/*.js').on('change', script);
+  gulp.watch('./public/static/css/*.css').on('change', gulp.series(styles));
+  gulp.watch('./public/static/js/*.js').on('change', gulp.series(script));
   gulp.watch("./public/*.html").on('change', browserSync.reload);
 }
 
@@ -46,25 +46,33 @@ function script() {
         .pipe(plugins().sourcemaps.init({'loadMaps': true}))
         .pipe(plugins().sourcemaps.write('.'))
         // Start piping stream to tasks!
-        .pipe(gulp.dest('public/build/js/'))
+        .pipe(gulp.dest('public/apid/js/'))
         .pipe(browserSync.reload({stream: true}));
 }
 
 function styles() {
-
   return gulp.src('./public/static/css/*.css')
           .pipe(plugins().sourcemaps.init())
           // .pipe(plugins().sass().on('error', plugins().sass.logError))
           .pipe(plugins().sourcemaps.write())
-          .pipe(gulp.dest('public/build/css/'))
+          .pipe(gulp.dest('public/apid/css/'))
+          .pipe(browserSync.reload({stream: true}));
+}
+
+function img() {
+  return gulp.src('./public/static/img/*')
+          .pipe(plugins().sourcemaps.init())
+          // .pipe(plugins().sass().on('error', plugins().sass.logError))
+          .pipe(plugins().sourcemaps.write())
+          .pipe(gulp.dest('public/apid/img/'))
           .pipe(browserSync.reload({stream: true}));
 }
 
 // Static Server + watching scss/html files
-exports.serve = gulp.series(styles, script, serve);
+exports.serve = gulp.series(img, styles, script, serve);
 // Static Server + watching scss/html files
-exports.compile = gulp.series(styles, script);
+exports.compile = gulp.series(img, styles, script);
 
 
 // Default task
-exports.default = gulp.series(styles, script, serve);
+exports.default = gulp.series(img, styles, script, serve);

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import axios from 'axios/dist/axios';
+import axios from 'axios/dist/axios.min.js';
 
 
 
@@ -85,18 +85,17 @@ const AppId = () => {
   return <div style={{ position: 'relative' }}>
             <section role="button" className={showChat?'appid-d-none':'chat-icon'}
               onClick={() => setShowChat(true)} style={{ zIndex: "100" }}>
-              <img src="/static/img/logomin.png" alt=""></img>
+              <img src="/apid/img/logomin.png" alt=""></img>
             </section>  
 
             <section className={getClass()} style={{ maxWidth: "90%", maxHeight: "90%", zIndex: "100"}}>
               <div className='appid-d-flex appid-align-items-center'>
                 <div className='appid-flex-grow-1 appid-text-center'>
-                  <img src="/static/img/logo.png" height={40} width={130} alt=''></img>
+                  <img src="/apid/img/logo.png" height={40} width={130} alt=''></img>
                 </div>
                 <i className="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
               </div>
               <div className='appid-flex-grow-1 appid-mt-3 appid-mb-3 rcv-msg-container' style={{ overflowY: 'auto'}}>
-                
                 {messageList.map( (item,idx) =>
                 <div key={idx} className='appid-mt-3 appid-pe-2'>
                   <div className={`w-100 ${item.author === AUTHOR.BOT?'appid-text-end':'appid-text-start'}`}>
@@ -107,7 +106,7 @@ const AppId = () => {
               </div>
               {loading?
               <div className="appid-d-flex appid-justify-content-end appid-align-items-end">
-                <img src="/static/img/spinner.svg" alt="" style={{ height: '60px'}}></img>
+                <img src="/apid/img/spinner.svg" alt="" style={{ height: '60px'}}></img>
               </div>
               :null}
               <div className='appid-d-flex appid-align-items-center appid-justify-content-center input-msg-container'>
@@ -144,7 +143,7 @@ const myInitCode = () => {
 
   // inject CSS files
   injectCSSFiles('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css')
-  injectCSSFiles('/static/css/appid.css')
+  injectCSSFiles('/apid/css/appid.css')
 
 
   // Creating container
@@ -160,7 +159,14 @@ const myInitCode = () => {
 }
 
 // See: https://stackoverflow.com/questions/39993676/code-inside-domcontentloaded-event-not-working
-if (document.readyState !== 'loading')  myInitCode();
-else document.addEventListener('DOMContentLoaded', () => myInitCode() );
+if (document.readyState !== 'loading') {
+  console.log('document is already ready, just execute code here');
+  myInitCode();
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+      console.log('document was not ready, place code here');
+      myInitCode();
+  });
+}
 
 
