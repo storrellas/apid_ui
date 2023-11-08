@@ -1,21 +1,38 @@
+import os
+import sys
+import traceback
+
 from bs4 import BeautifulSoup
-import os, sys
 
+# Configuration parameters
 currentdir = os.path.dirname(os.path.abspath(__file__))
-
-BASE_PATH = f"{currentdir}/../RWOz/www.runningwarehouse.com.au"
+BASE_PATH = f"{currentdir}/RWOz/www.runningwarehouse.com.au"
 
 if __name__ == "__main__":
 
-
+  ####################
+  # COUNTING HTML FILES
+  ####################
+  html_files_total = 0
   for root, dirnames, filenames in os.walk(BASE_PATH):
     for filename in filenames:
       if filename.endswith('.html'):
+        html_files_total = html_files_total + 1
 
+  ####################
+  # PROCESSING FILES
+  ####################
+  html_files_count = 0
+  for root, dirnames, filenames in os.walk(BASE_PATH):
+    for filename in filenames:
+      if filename.endswith('.html'):
+        html_files_count = html_files_count + 1
+
+        # Generating path
         file_html_path = f"{root}/{filename}"
         try:
 
-          print(f"Processing file '{file_html_path}' ...")
+          print(f"Processing file ({html_files_count}/{html_files_total}) '{file_html_path}' ...")
 
           # Read file
           soup = None
@@ -48,6 +65,7 @@ if __name__ == "__main__":
               file.write(str(soup))
         except Exception as e:
           print(f"FAILED FILE '{file_html_path}'")
+          traceback.print_exc()
 
 
         # fname = os.path.join(root, filename)
