@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     link = soup.new_tag("link")
     link['href'] = "https://apid.duckdns.org/apid/css/apid.css"
-
+    link['rel'] = "stylesheet"
 
 
     soup.html.head.append(link)
