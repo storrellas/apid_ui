@@ -2,6 +2,7 @@ import os
 import sys
 import traceback
 import logging
+import argparse
 
 from bs4 import BeautifulSoup
 
@@ -23,7 +24,18 @@ logger.addHandler(consoleHandler)
 logger.setLevel(logging.DEBUG)
 
 if __name__ == "__main__":
+  # Parser
+  parser = argparse.ArgumentParser(description='Injector HTML')
+  parser.add_argument('-b', '--base_path', type=str, help='Introduces the path for processing file', required=True)
+  args = parser.parse_args()
 
+  # Check folder exists
+  if os.path.isdir(args.base_path) == False:
+    logger.error(f"Folder '{args.base_path}' does not exist")
+    sys.exit(0)
+
+  BASE_PATH = args.base_path
+  
   ####################
   # COUNTING HTML FILES
   ####################
