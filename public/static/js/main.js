@@ -85,13 +85,13 @@ const AppId = () => {
   return <div style={{ position: 'relative' }}>
             <section role="button" className={showChat?'appid-d-none':'chat-icon'}
               onClick={() => setShowChat(true)} style={{ zIndex: "100" }}>
-              <img src="/apid/img/logomin.png" alt=""></img>
+              <img src="https://apid.duckdns.org/apid/img/logomin.png" alt=""></img>
             </section>  
 
             <section className={getClass()} style={{ maxWidth: "90%", maxHeight: "90%", zIndex: "100"}}>
               <div className='appid-d-flex appid-align-items-center'>
                 <div className='appid-flex-grow-1 appid-text-center'>
-                  <img src="/apid/img/logo.png" height={40} width={130} alt=''></img>
+                  <img src="https://apid.duckdns.org/apid/img/logo.png" height={40} width={130} alt=''></img>
                 </div>
                 <i className="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
               </div>
@@ -106,7 +106,7 @@ const AppId = () => {
               </div>
               {loading?
               <div className="appid-d-flex appid-justify-content-end appid-align-items-end">
-                <img src="/apid/img/spinner.svg" alt="" style={{ height: '60px'}}></img>
+                <img src="https://apid.duckdns.org/apid/img/spinner.svg" alt="" style={{ height: '60px'}}></img>
               </div>
               :null}
               <div className='appid-d-flex appid-align-items-center appid-justify-content-center input-msg-container'>
