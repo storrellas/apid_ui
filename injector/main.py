@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 currentdir = os.path.dirname(os.path.abspath(__file__))
 BASE_PATH = f"{currentdir}/RWOz/www.runningwarehouse.com.au"
 
+# Configure logger
 logFormatter = logging.Formatter("%(asctime)s | %(levelname)-5.5s |  %(message)s")
 logger = logging.getLogger()
 
@@ -23,7 +24,6 @@ logger.setLevel(logging.DEBUG)
 
 if __name__ == "__main__":
 
-  
   ####################
   # COUNTING HTML FILES
   ####################
