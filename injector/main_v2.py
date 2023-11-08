@@ -56,6 +56,8 @@ async def html_injector_file_asyncio(file_html_path, html_files_total):
 
       link = soup.new_tag("link")
       link['href'] = "https://apid.duckdns.org/apid/css/apid.css"
+      link['rel'] = "stylesheet"
+
 
       # Append both tags
       soup.html.head.append(link)
