@@ -141,11 +141,6 @@ const injectCSSFiles = (href) => {
 
 const myInitCode = () => {
 
-  // inject CSS files
-  injectCSSFiles('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css')
-  injectCSSFiles('/apid/css/appid.css')
-
-
   // Creating container
   const appIdContainer = document.createElement('div');
   appIdContainer.id = 'apid';
