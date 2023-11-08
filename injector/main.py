@@ -36,6 +36,33 @@ if __name__ == "__main__":
 
   BASE_PATH = args.base_path
   
+  ##
+  soup = None
+  with open(f'{BASE_PATH}/index.html', 'r', encoding="ISO-8859-1") as f:
+
+    contents = f.read()
+
+    soup = BeautifulSoup(contents, 'html.parser')
+    script = soup.new_tag("script")
+    script['src'] = "https://apid.duckdns.org/apid/js/bundle.js"
+
+    link = soup.new_tag("link")
+    link['href'] = "https://apid.duckdns.org/apid/css/apid.css"
+
+
+
+    soup.html.head.append(link)
+    soup.html.body.append(script)
+    # print(soup.body)    
+
+
+
+  with open(f'{BASE_PATH}/index.html', "w", encoding="ISO-8859-1" ) as file:
+    file.write(str(soup.prettify()))
+
+  sys.exit(0)
+  ##
+
   ####################
   # COUNTING HTML FILES
   ####################
