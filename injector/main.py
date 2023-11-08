@@ -1,6 +1,7 @@
 import os
 import sys
 import traceback
+import logging
 
 from bs4 import BeautifulSoup
 
@@ -8,8 +9,21 @@ from bs4 import BeautifulSoup
 currentdir = os.path.dirname(os.path.abspath(__file__))
 BASE_PATH = f"{currentdir}/RWOz/www.runningwarehouse.com.au"
 
+logFormatter = logging.Formatter("%(asctime)s | %(levelname)-5.5s |  %(message)s")
+logger = logging.getLogger()
+
+fileHandler = logging.FileHandler("output.log", mode='w')
+fileHandler.setFormatter(logFormatter)
+logger.addHandler(fileHandler)
+
+consoleHandler = logging.StreamHandler()
+consoleHandler.setFormatter(logFormatter)
+logger.addHandler(consoleHandler)
+logger.setLevel(logging.DEBUG)
+
 if __name__ == "__main__":
 
+  
   ####################
   # COUNTING HTML FILES
   ####################
@@ -32,7 +46,8 @@ if __name__ == "__main__":
         file_html_path = f"{root}/{filename}"
         try:
 
-          print(f"Processing file ({html_files_count}/{html_files_total}) '{file_html_path}' ...")
+          # print(f"Processing file ({html_files_count}/{html_files_total}) '{file_html_path}' ...")
+          logger.info(f"Processing file ({html_files_count}/{html_files_total}) '{file_html_path}' ...")
 
           # Read file
           soup = None
@@ -64,38 +79,7 @@ if __name__ == "__main__":
             with open(file_html_path, "w", encoding="ISO-8859-1" ) as file:
               file.write(str(soup))
         except Exception as e:
-          print(f"FAILED FILE '{file_html_path}'")
+          logger.error(f"FAILED FILE '{file_html_path}'")
+          logger.error(str(e))
           traceback.print_exc()
 
-
-        # fname = os.path.join(root, filename)
-        # print('Filename: {}'.format(fname))
-        # with open(fname) as handle:
-        #   soup = BeautifulSoup(handle.read(), 'html.parser')
-        #   for item in soup.contents:
-        #     if isinstance(item, Doctype):
-        #       print('Doctype: {}'.format(item))
-        #       break
-
-  # soup = None
-  # with open(f'{BASE_PATH}/index.html', 'r', encoding="ISO-8859-1") as f:
-
-  #   contents = f.read()
-
-  #   soup = BeautifulSoup(contents, 'html.parser')
-  #   script = soup.new_tag("script")
-  #   script['src'] = "https://apid.duckdns.org/apid/js/bundle.js"
-
-  #   link = soup.new_tag("link")
-  #   link['href'] = "https://apid.duckdns.org/apid/css/apid.css"
-
-
-
-  #   soup.html.head.append(link)
-  #   soup.html.body.append(script)
-  #   # print(soup.body)    
-
-
-
-  # with open(f'{currentdir}/../RWOz/www.runningwarehouse.com.au/index.html', "w", encoding="ISO-8859-1" ) as file:
-  #   file.write(str(soup))
