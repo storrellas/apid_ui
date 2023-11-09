@@ -145,3 +145,7 @@
 [role=button] {
   cursor: pointer;
 }
+
+.appid-invisible{
+  visibility: hidden;
+}

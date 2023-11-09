@@ -138,11 +138,11 @@ const AppId = () => {
                   <div style={{ textAlign:'justify' }} key={idx}>{item.message}</div>
                 </div>)}
               </div>
-              {loading?
-              <div className="appid-d-flex appid-justify-content-end appid-align-items-end">
-                <img src="https://apid.duckdns.org/apid/img/spinner.svg" alt="" style={{ height: '60px'}}></img>
+              
+              <div className={loading|| true?"appid-d-flex appid-justify-content-end appid-align-items-end":"appid-invisible"}>
+                <img src="/apid/img/spinner.svg" alt="" style={{ height: '30px'}}></img>
               </div>
-              :null}
+              
               <div className='appid-d-flex appid-align-items-center appid-justify-content-center input-msg-container'>
                 <input value={message}
                   className="input-msg" type="text" 
