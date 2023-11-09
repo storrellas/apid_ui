@@ -38,6 +38,12 @@ def html_inject_file(file_html_path, html_files_count = 1, html_files_total = 1)
       # Process with Beautifulsoup
       soup = BeautifulSoup(contents, 'html.parser')
 
+      script_test = soup.html.body.findAll('script',  {"src" : "https://apid.duckdns.org/apid/js/bundle.js"})
+      if len(script_test) > 0:
+        logger.info(f"File ({html_files_count}/{html_files_total}) '{file_html_path}' already parsed ...")
+        return
+      
+
       # Check HTML
       if soup.html is None:
         logger.info(f"Non-parseable file ({html_files_count}/{html_files_total}) '{file_html_path}' ...")
