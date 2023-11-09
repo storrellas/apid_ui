@@ -104,6 +104,7 @@ const AppId = () => {
       const apid = JSON.parse(apid_str)
       conversationIdRef.current = apid.conversation_id
       setMessageList( apid.conversation_history )
+      setShowChat(true)
     }
   }, [])
 
