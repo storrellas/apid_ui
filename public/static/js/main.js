@@ -84,11 +84,11 @@ const AppId = () => {
 
   return <div style={{ position: 'relative' }}>
             <section role="button" className={showChat?'appid-d-none':'chat-icon'}
-              onClick={() => setShowChat(true)} style={{ zIndex: "100" }}>
+              onClick={() => setShowChat(true)} style={{ zIndex: "3000" }}>
               <img src="https://apid.duckdns.org/apid/img/logomin.png" alt=""></img>
             </section>  
 
-            <section className={getClass()} style={{ maxWidth: "90%", maxHeight: "90%", zIndex: "100"}}>
+            <section className={getClass()} style={{ maxWidth: "90%", maxHeight: "90%", zIndex: "3000"}}>
               <div className='appid-d-flex appid-align-items-center'>
                 <div className='appid-flex-grow-1 appid-text-center'>
                   <img src="https://apid.duckdns.org/apid/img/logo.png" height={40} width={130} alt=''></img>
