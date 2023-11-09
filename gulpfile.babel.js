@@ -23,15 +23,15 @@ export const webserver = () => {
       port: 8080
   });
 
-  gulp.watch('./public/static/css/*.css').on('change', gulp.series(styles));
-  gulp.watch('./public/static/js/*.js').on('change', gulp.series(script));
+  gulp.watch('./app/css/*.css').on('change', gulp.series(styles));
+  gulp.watch('./app/js/*.js').on('change', gulp.series(script));
   gulp.watch("./public/*.html").on('change', browserSync.reload);
 }
 
 const script = () => {
   
   return browserify({
-            'entries': ['./public/static/js/main.js'],
+            'entries': ['./app/js/main.js'],
             'debug': true,
           })
           .transform("babelify", {
@@ -50,7 +50,7 @@ const script = () => {
 }
 
 function styles() {
-  return gulp.src('./public/static/css/*.css')
+  return gulp.src('./app/css/*.css')
           // .pipe(plugins().sourcemaps.init())
           // // .pipe(plugins().sass().on('error', plugins().sass.logError))
           // .pipe(plugins().sourcemaps.write())
@@ -59,7 +59,7 @@ function styles() {
 }
 
 function img() {
-  return gulp.src('./public/static/img/*')
+  return gulp.src('./app/img/*')
           // .pipe(plugins().sourcemaps.init())
           // .pipe(plugins().sourcemaps.write())
           .pipe(gulp.dest('public/apid/img/'))
