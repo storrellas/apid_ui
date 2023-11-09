@@ -15,3 +15,4 @@ echo "------------------"
 ssh -tt apid "rm -r /home/ubuntu/workspace/RWOz/www.runningwarehouse.com.au/apid"
 ssh -tt apid "mkdir /home/ubuntu/workspace/RWOz/www.runningwarehouse.com.au/apid"
 scp -r public/apid/* apid:/home/ubuntu/workspace/RWOz/www.runningwarehouse.com.au/apid
+scp -r public/apid/* apid:/home/ubuntu/workspace/apid_ui_github/injector/RWOz/www.runningwarehouse.com.au

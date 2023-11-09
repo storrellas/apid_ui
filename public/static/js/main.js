@@ -6,7 +6,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios/dist/axios.min.js';
-
+import { v4 as uuidv4 } from 'uuid';
 
 
 const AUTHOR = { ME: 'ME', BOT: 'BOT' } 
@@ -16,6 +16,7 @@ const AppId = () => {
   const [loading, setLoading ] = React.useState(false)
   const [messageList, setMessageList ] = React.useState([])
   const [ message, setMessage ] = React.useState('')
+  const conversationIdRef = React.useRef( uuidv4() )
 
   const sendMessage = async (message) => {
     const messageListLocal = [...messageList]
@@ -31,8 +32,8 @@ const AppId = () => {
       data: {
         type: "recommendation",
         attributes: {
-          product_type: message,
-          conversation_history
+          conversation_id: conversationIdRef.current,
+          product_type: message
         }
       }
     }
