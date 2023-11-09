@@ -3,7 +3,7 @@
 // import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
 // import '/vendor/axios/dist/axios.min.js';
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios/dist/axios.min.js';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,16 +18,27 @@ const AppId = () => {
   const [ message, setMessage ] = React.useState('')
   const conversationIdRef = React.useRef( uuidv4() )
 
+  const refreshSessionStorage = (messageList) => {
+    const apid = {
+      conversation_id: conversationIdRef.current,
+      conversation_history: messageList
+    }
+    sessionStorage.setItem('apid', JSON.stringify(apid))
+  }
+
   const sendMessage = async (message) => {
     const messageListLocal = [...messageList]
     messageListLocal.push({author: AUTHOR.ME, name: 'Me', message })
     setMessageList([...messageListLocal ])
 
+    // Update sessionStorage
+    refreshSessionStorage(messageListLocal)
+
     // Do not launch multiple calls
     if( loading ) return
     setLoading(true)
-    const conversation_history = messageListLocal.map( item => item.message)
-    conversation_history.pop()
+    // const conversation_history = messageListLocal.map( item => item.message)
+    // conversation_history.pop()
     const body = {
       data: {
         type: "recommendation",
@@ -45,6 +56,10 @@ const AppId = () => {
 
     setMessageList(messageListLocal)
     setLoading(false)
+
+
+    // Update sessionStorage
+    refreshSessionStorage(messageListLocal)
   }
 
 
@@ -82,6 +97,15 @@ const AppId = () => {
     }
   }
 
+  useEffect( () => {
+    const apid_str = sessionStorage.getItem('apid')
+    
+    if( apid_str && apid_str.length > 0 ){
+      const apid = JSON.parse(apid_str)
+      conversationIdRef.current = apid.conversation_id
+      setMessageList( apid.conversation_history )
+    }
+  }, [])
 
   return <div style={{ position: 'relative' }}>
             <section role="button" className={showChat?'appid-d-none':'chat-icon'}
