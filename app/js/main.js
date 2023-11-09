@@ -118,7 +118,7 @@ const AppId = () => {
                 <div className='appid-flex-grow-1 appid-text-center'>
                   <img src="https://apid.duckdns.org/apid/img/logo.png" height={40} width={130} alt=''></img>
                 </div>
-                <i className="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
+                <i role="button" className="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
               </div>
               <div className='appid-flex-grow-1 appid-mt-3 appid-mb-3 rcv-msg-container' style={{ overflowY: 'auto'}}>
                 {messageList.map( (item,idx) =>
