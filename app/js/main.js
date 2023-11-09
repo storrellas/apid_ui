@@ -17,6 +17,7 @@ const AppId = () => {
   const [messageList, setMessageList ] = React.useState([])
   const [ message, setMessage ] = React.useState('')
   const conversationIdRef = React.useRef( uuidv4() )
+  const conversationContainer = React.useRef()
 
   const refreshSessionStorage = (messageList) => {
     const apid = {
@@ -108,6 +109,13 @@ const AppId = () => {
     }
   }, [])
 
+  useEffect( () => {
+    const scrollHeight = conversationContainer.current.scrollHeight;
+    const height = conversationContainer.current.clientHeight;
+    const maxScrollTop = scrollHeight - height;
+    conversationContainer.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+  }, [messageList])
+
   return <div style={{ position: 'relative' }}>
             <section role="button" className={showChat?'appid-d-none':'chat-icon'}
               onClick={() => setShowChat(true)} style={{ zIndex: "3000" }}>
@@ -121,7 +129,7 @@ const AppId = () => {
                 </div>
                 <i role="button" className="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
               </div>
-              <div className='appid-flex-grow-1 appid-mt-3 appid-mb-3 rcv-msg-container' style={{ overflowY: 'auto'}}>
+              <div ref={conversationContainer} className='appid-flex-grow-1 appid-mt-3 appid-mb-3 rcv-msg-container' style={{ overflowY: 'auto'}}>
                 {messageList.map( (item,idx) =>
                 <div key={idx} className='appid-mt-3 appid-pe-2'>
                   <div className={`w-100 ${item.author === AUTHOR.BOT?'appid-text-end':'appid-text-start'}`}>
