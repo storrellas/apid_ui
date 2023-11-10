@@ -3,21 +3,33 @@
 // import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
 // import '/vendor/axios/dist/axios.min.js';
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios/dist/axios.min.js';
 import { v4 as uuidv4 } from 'uuid';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 
 const AUTHOR = { ME: 'ME', BOT: 'BOT' } 
 const AppId = () => {
-  const [showHideChat, setShowHideChat ] = React.useState(false)
-  const [showChat, setShowChat ] = React.useState(false)
-  const [loading, setLoading ] = React.useState(false)
-  const [messageList, setMessageList ] = React.useState([])
-  const [ message, setMessage ] = React.useState('')
-  const conversationIdRef = React.useRef( uuidv4() )
-  const conversationContainer = React.useRef()
+  const [showHideChat, setShowHideChat ] = useState(false)
+  const [showChat, setShowChat ] = useState(false)
+  const [loading, setLoading ] = useState(false)
+  const [messageList, setMessageList ] = useState([])
+  const [ message, setMessage ] = useState('')
+  const conversationIdRef = useRef( uuidv4() )
+  const conversationContainer = useRef()
+  const [socketUrl, setSocketUrl] = useState('wss://apid.duckdns.org/ws/chat');
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const messageOngoing = useRef(false)
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: 'Connecting',
+    [ReadyState.OPEN]: 'Open',
+    [ReadyState.CLOSING]: 'Closing',
+    [ReadyState.CLOSED]: 'Closed',
+    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+  }[readyState];
 
   const refreshSessionStorage = (messageList) => {
     const apid = {
@@ -27,7 +39,7 @@ const AppId = () => {
     sessionStorage.setItem('apid', JSON.stringify(apid))
   }
 
-  const sendMessage = async (message) => {
+  const apiMessage = async (message) => {
     const messageListLocal = [...messageList]
     messageListLocal.push({author: AUTHOR.ME, name: 'Me', message })
     setMessageList([...messageListLocal ])
@@ -50,7 +62,6 @@ const AppId = () => {
       }
     }
     const base_url = window.base_url?window.base_url:"https://apid.duckdns.org"
-
     const response = await axios.post(`${base_url}/api/chat`, body)    
     const json_response = response.data.data.attributes
     messageListLocal.push({author: AUTHOR.BOT, message: json_response.body, name: json_response.name})
@@ -63,6 +74,36 @@ const AppId = () => {
     refreshSessionStorage(messageListLocal)
   }
 
+  const wsMessage = async (message) => {
+    const messageListLocal = [...messageList]
+    messageListLocal.push({author: AUTHOR.ME, name: 'Me', message })
+    setMessageList([...messageListLocal ])
+
+    // Update sessionStorage
+    refreshSessionStorage(messageListLocal)
+
+    // Do not launch multiple calls
+    if( loading ) return
+    setLoading(true)
+    const body = {
+      data: {
+        type: "recommendation",
+        attributes: {
+          conversation_id: conversationIdRef.current,
+          product_type: message
+        }
+      }
+    }
+    console.log("body ", body)
+    sendMessage(JSON.stringify(body))
+    messageListLocal.push({author: AUTHOR.BOT, message: "", name: 'Bot'})
+    setMessageList(messageListLocal)
+
+
+
+    // Update sessionStorage
+    refreshSessionStorage(messageListLocal)
+  }
 
   const onHideChat = () => {
     setShowHideChat(true)
@@ -75,13 +116,15 @@ const AppId = () => {
   const onKeyDownMessage = (e) => {
     if( e.key === 'Enter'){
       setMessage('')            
-      sendMessage(message)
+      //apiMessage(message)
+      wsMessage(message)
     }
   }
 
   const onClickSendMessage = () => {
     setMessage('')        
-    sendMessage(message)
+    //apiMessage(message)
+    wsMessage(message)
   }
 
   const getClass = () => {
@@ -116,6 +159,44 @@ const AppId = () => {
     conversationContainer.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
   }, [messageList])
 
+  // const isJSON = (str) => {
+  //   try {      
+  //     const json_str = JSON.parse(str.replace(/"/g, ""));
+  //     return true;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+
+  useEffect(() => {
+    if (lastMessage != null) {
+      
+      const lastMessageStr = lastMessage.data.replace(/"/g, "")
+      // Check message type
+      if(/[end=[0-9]*]\\n/.test(lastMessageStr) ){
+        messageOngoing.current = false
+        setLoading(false)
+      // }else if(isJSON(lastMessage.data)){
+      //   // Do nothing
+      }else if(/{*}/.test(lastMessage.data)){
+        // mark message started
+        if(Object.keys(JSON.parse(lastMessage.data)).length == 0)
+          messageOngoing.current = true
+      }else{
+        const messageListLocal = JSON.parse(JSON.stringify(messageList))
+        const currentMessageLocal = messageListLocal[messageListLocal.length-1]
+        currentMessageLocal.message = currentMessageLocal.message + lastMessageStr
+        setMessageList( messageListLocal )
+        // mark message ended
+        messageOngoing.current = false
+
+        // Update sessionStorage
+        refreshSessionStorage(messageListLocal)
+      }
+        
+    }
+  }, [lastMessage]);
+
   return <div style={{ position: 'relative' }}>
             <section role="button" className={showChat?'appid-d-none':'chat-icon'}
               onClick={() => setShowChat(true)} style={{ zIndex: "3000" }}>
@@ -139,8 +220,8 @@ const AppId = () => {
                 </div>)}
               </div>
               
-              <div className={loading|| true?"appid-d-flex appid-justify-content-end appid-align-items-end":"appid-invisible"}>
-                <img src="/apid/img/spinner.svg" alt="" style={{ height: '30px'}}></img>
+              <div className={loading?"appid-d-flex appid-justify-content-end appid-align-items-end":"appid-invisible"}>
+                <img src="https://apid.duckdns.org/apid/img/spinner.svg" alt="" style={{ height: '30px'}}></img>
               </div>
               
               <div className='appid-d-flex appid-align-items-center appid-justify-content-center input-msg-container'>
