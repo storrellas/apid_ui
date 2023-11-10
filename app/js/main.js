@@ -11,11 +11,12 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 
 const AUTHOR = { ME: 'ME', BOT: 'BOT' } 
+const CHAT_MODE = { MINIFIED: 'MINIFIED', STANDARD: 'STANDARD', MAXIFIED: 'MAXIFIED'}
 const AppId = () => {
   const [showHideChat, setShowHideChat ] = useState(false)
-  const [showChat, setShowChat ] = useState(false)
+  const [chatMode, setChatMode ] = useState(CHAT_MODE.MINIFIED)
   const [loading, setLoading ] = useState(false)
-  const [messageList, setMessageList ] = useState([])
+  const [ messageList, setMessageList ] = useState([])
   const [ message, setMessage ] = useState('')
   const conversationIdRef = useRef( uuidv4() )
   const conversationContainer = useRef()
@@ -64,7 +65,7 @@ const AppId = () => {
     const base_url = window.base_url?window.base_url:"https://apid.duckdns.org"
     const response = await axios.post(`${base_url}/api/chat`, body)    
     const json_response = response.data.data.attributes
-    messageListLocal.push({author: AUTHOR.BOT, message: json_response.body, name: json_response.name})
+    messageListLocal.push({author: AUTHOR.BOT, message: json_response.body, name: json_response.name, html:''})
 
     setMessageList(messageListLocal)
     setLoading(false)
@@ -96,7 +97,12 @@ const AppId = () => {
     }
     console.log("body ", body)
     sendMessage(JSON.stringify(body))
-    messageListLocal.push({author: AUTHOR.BOT, message: "", name: 'Bot'})
+    messageListLocal.push({
+        author: AUTHOR.BOT, 
+        message: "", 
+        name: 'Bot', 
+        html: '<div>test</div>'
+    })
     setMessageList(messageListLocal)
 
 
@@ -107,7 +113,7 @@ const AppId = () => {
 
   const onHideChat = () => {
     setShowHideChat(true)
-    setShowChat(false)
+    setChatMode(CHAT_MODE.MINIFIED)
     setTimeout( () => {
       setShowHideChat(false)
     }, 200)
@@ -129,10 +135,13 @@ const AppId = () => {
 
   const getClass = () => {
 
-    if( showChat === true )
-      return 'show-chat appid-d-flex appid-flex-column chat-container'
+    if( chatMode===CHAT_MODE.STANDARD )
+      return 'show-chat appid-d-flex appid-flex-column chat-container-maxified'
 
-    if( showChat === false ){
+    if( chatMode===CHAT_MODE.MAXIFIED )
+      return 'show-chat appid-d-flex appid-flex-column chat-container-maxified'
+
+    if( chatMode===CHAT_MODE.MINIFIED ){
       if (showHideChat === true){
         return 'hide-chat appid-d-flex appid-flex-column chat-container'
       }else{
@@ -148,7 +157,7 @@ const AppId = () => {
       const apid = JSON.parse(apid_str)
       conversationIdRef.current = apid.conversation_id
       setMessageList( apid.conversation_history )
-      setShowChat(true)
+      setChatMode(CHAT_MODE.STANDARD)
     }
   }, [])
 
@@ -199,9 +208,35 @@ const AppId = () => {
     }
   }, [lastMessage]);
 
+  const Card = () => {
+    return <div className='d-flex p-3' style={{ background: '#E6E6E6', borderRadius: '5px'}}>
+              <div className='appid-w-50'>
+                
+                <b>New Balance FuelCell SuperComp Elite v3</b>
+                <b>349.95€</b>
+                <div className='w-100' style={{ textAlign: 'justify'}}>
+                  Formerly named the FuelCell RC Elite, The FuelCell ... 
+                </div>
+                <div className="d-flex justify-content-between align-items-center" style={{ color: '#F8D64E'}}>
+                  <i className='fa-solid fa-star'></i>
+                  <i className='fa-solid fa-star'></i>
+                  <i className='fa-solid fa-star'></i>
+                  <i className='fa-solid fa-star'></i>
+                  <i className='fa-regular fa-star'></i>
+                  <div style={{ color: 'black'}}>(4/5)</div>                            
+                </div>
+                <small>31 votes</small>
+              </div>
+              <div className='w-50 text-center d-flex justify-content-center align-items-center ps-3'>
+                <img className="appid-w-100" style={{ borderRadius: '5px', border: '2px solid #B3B3B3'}}
+                  src="https://img.runningwarehouse.com.au/watermark/rs.php?path=NSCE3M7-1.jpg&nw=210"></img>                        
+              </div>
+            </div>
+  }
+
   return <div style={{ position: 'relative' }}>
-            <section role="button" className={showChat?'appid-d-none':'chat-icon'}
-              onClick={() => setShowChat(true)} style={{ zIndex: "3000" }}>
+            <section role="button" className={chatMode===CHAT_MODE.MINIFIED?'chat-icon':'appid-d-none'}
+              onClick={() => setChatMode(CHAT_MODE.STANDARD)} style={{ zIndex: "3000" }}>
               <img src="https://apid.duckdns.org/apid/img/logomin.png" alt=""></img>
             </section>  
 
@@ -219,6 +254,27 @@ const AppId = () => {
                     <b>{item.name} says:</b>
                   </div>
                   <div style={{ textAlign:'justify' }} key={idx}>{item.message}</div>
+                  {item.html?
+                    <div className="content" dangerouslySetInnerHTML={{__html: item.html}}></div>
+                  :null}
+                  <div className='appid-w-100 appid-mt-3'>
+                    <div className='d-flex'>
+                      <div className='w-50 me-1'>
+                        <Card />
+                      </div>
+                      <div className='ms-1 w-50'>
+                        <Card />
+                      </div>
+                    </div>
+                    <div className='d-flex mt-1'>
+                      <div className='w-50 me-1'>
+                        <Card />
+                      </div>
+                      <div className='ms-1 w-50'>
+                        <Card />
+                      </div>
+                    </div>
+                  </div>
                 </div>)}
               </div>
               
