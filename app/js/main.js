@@ -170,12 +170,14 @@ const AppId = () => {
 
   useEffect(() => {
     if (lastMessage != null) {
-      
+      console.log("lastMessage.data ", lastMessage.data)
       const lastMessageStr = lastMessage.data.replace(/"/g, "")
       // Check message type
       if(/[end=[0-9]*]\\n/.test(lastMessageStr) ){
         messageOngoing.current = false
         setLoading(false)
+      }else if(/[start=[0-9]*]\\n/.test(lastMessageStr)){
+        messageOngoing.current = true     
       // }else if(isJSON(lastMessage.data)){
       //   // Do nothing
       }else if(/{*}/.test(lastMessage.data)){
