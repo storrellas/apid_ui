@@ -136,7 +136,7 @@ const AppId = () => {
   const getClass = () => {
 
     if( chatMode===CHAT_MODE.STANDARD )
-      return 'show-chat appid-d-flex appid-flex-column chat-container-maxified'
+      return 'show-chat appid-d-flex appid-flex-column chat-container'
 
     if( chatMode===CHAT_MODE.MAXIFIED )
       return 'show-chat appid-d-flex appid-flex-column chat-container-maxified'
@@ -209,27 +209,30 @@ const AppId = () => {
   }, [lastMessage]);
 
   const Card = () => {
-    return <div className='d-flex p-3' style={{ background: '#E6E6E6', borderRadius: '5px'}}>
-              <div className='appid-w-50'>
-                
-                <b>New Balance FuelCell SuperComp Elite v3</b>
+    return <div className='p-3' style={{ background: '#E6E6E6', borderRadius: '5px'}}>
+              <div>
+                <div><b>New Balance FuelCell</b></div>
                 <b>349.95€</b>
-                <div className='w-100' style={{ textAlign: 'justify'}}>
-                  Formerly named the FuelCell RC Elite, The FuelCell ... 
-                </div>
-                <div className="d-flex justify-content-between align-items-center" style={{ color: '#F8D64E'}}>
-                  <i className='fa-solid fa-star'></i>
-                  <i className='fa-solid fa-star'></i>
-                  <i className='fa-solid fa-star'></i>
-                  <i className='fa-solid fa-star'></i>
-                  <i className='fa-regular fa-star'></i>
-                  <div style={{ color: 'black'}}>(4/5)</div>                            
-                </div>
-                <small>31 votes</small>
               </div>
-              <div className='w-50 text-center d-flex justify-content-center align-items-center ps-3'>
-                <img className="appid-w-100" style={{ borderRadius: '5px', border: '2px solid #B3B3B3'}}
-                  src="https://img.runningwarehouse.com.au/watermark/rs.php?path=NSCE3M7-1.jpg&nw=210"></img>                        
+              <div className='d-flex mt-2'>
+                <div className='w-50' style={{ fontSize:'12px'}}>                
+                  <div className='w-100 multiline-ellipsis' style={{ textAlign: 'justify'}}>                
+                    Formerly named the FuelCell RC Elite, The FuelCell SuperComp Elite V3 is built for speed and is the pinnacle model of the SuperComp family. The SC Elite V3 is built around Energy Arc. Energy Arc technology features a unique bowed carbon fiber plate geometry with a strategic void in the midsole to deliver exceptionally high levels of energy return. This technology delivers a smoother and faster ride compared to previous models.
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center" style={{ color: '#F8D64E'}}>
+                    <i className='fa-solid fa-star'></i>
+                    <i className='fa-solid fa-star'></i>
+                    <i className='fa-solid fa-star'></i>
+                    <i className='fa-solid fa-star'></i>
+                    <i className='fa-regular fa-star'></i>
+                    <div style={{ color: 'black'}}>(4/5)</div>                            
+                  </div>
+                  <small>31 votes</small>
+                </div>
+                <div className='w-50 text-center d-flex justify-content-center align-items-center ps-3'>
+                  <img className="appid-w-100" style={{ borderRadius: '5px', border: '2px solid #B3B3B3'}}
+                    src="https://img.runningwarehouse.com.au/watermark/rs.php?path=NSCE3M7-1.jpg&nw=210"></img>                        
+                </div>
               </div>
             </div>
   }
@@ -254,10 +257,7 @@ const AppId = () => {
                     <b>{item.name} says:</b>
                   </div>
                   <div style={{ textAlign:'justify' }} key={idx}>{item.message}</div>
-                  {item.html?
-                    <div className="content" dangerouslySetInnerHTML={{__html: item.html}}></div>
-                  :null}
-                  <div className='appid-w-100 appid-mt-3'>
+                  {/* <div className='appid-w-100 appid-mt-3'>
                     <div className='d-flex'>
                       <div className='w-50 me-1'>
                         <Card />
@@ -274,7 +274,7 @@ const AppId = () => {
                         <Card />
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>)}
               </div>
               
