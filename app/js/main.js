@@ -196,7 +196,7 @@ const AppId = () => {
       }else{
         const messageListLocal = JSON.parse(JSON.stringify(messageList))
         const currentMessageLocal = messageListLocal[messageListLocal.length-1]
-        if(lastMessageStr == '\n') lastMessageStr = "<br></br>";
+        if(lastMessageStr.includes('\n') ) lastMessageStr = "<br></br>";
         currentMessageLocal.message = currentMessageLocal.message + lastMessageStr
         setMessageList( messageListLocal )
         // mark message ended
