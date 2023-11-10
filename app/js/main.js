@@ -210,7 +210,8 @@ const AppId = () => {
   }, [lastMessage]);
 
   const Card = () => {
-    return <div className='p-3' style={{ background: '#E6E6E6', borderRadius: '5px'}}>
+    return <div className='p-3' style={{ background: '#E6E6E6', borderRadius: '5px'}} role='button'
+              onClick={() => window.location = 'https://runningwarehouse.duckdns.org/Altra_Mens_Trail_Running_Shoes/catpage-ALTRAMTS.html'}>
               <div>
                 <div><b>New Balance FuelCell</b></div>
                 <b>349.95€</b>
@@ -269,7 +270,7 @@ const AppId = () => {
                         <Card />
                       </div>
                     </div>
-                    <div className='d-flex mt-1'>
+                    <div className='d-flex mt-3'>
                       <div className='w-50 me-1'>
                         <Card />
                       </div>
