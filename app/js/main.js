@@ -180,7 +180,7 @@ const AppId = () => {
   useEffect(() => {
     if (lastMessage != null) {
       console.log("lastMessage.data ", lastMessage.data)
-      const lastMessageStr = lastMessage.data.replace(/"/g, "")
+      let lastMessageStr = lastMessage.data.replace(/"/g, "")
       // Check message type
       if(/[end=[0-9]*]\\n/.test(lastMessageStr) ){
         messageOngoing.current = false
@@ -196,6 +196,7 @@ const AppId = () => {
       }else{
         const messageListLocal = JSON.parse(JSON.stringify(messageList))
         const currentMessageLocal = messageListLocal[messageListLocal.length-1]
+        if(lastMessageStr == '\n') lastMessageStr = "<br></br>";
         currentMessageLocal.message = currentMessageLocal.message + lastMessageStr
         setMessageList( messageListLocal )
         // mark message ended
@@ -256,7 +257,9 @@ const AppId = () => {
                   <div className={`w-100 ${item.author === AUTHOR.BOT?'appid-text-end':'appid-text-start'}`}>
                     <b>{item.name} says:</b>
                   </div>
-                  <div style={{ textAlign:'justify' }} key={idx}>{item.message}</div>
+                  <div style={{ textAlign:'justify' }} key={idx}>
+                    <div dangerouslySetInnerHTML={{__html: item.message}} />
+                  </div>
                   {/* <div className='appid-w-100 appid-mt-3'>
                     <div className='d-flex'>
                       <div className='w-50 me-1'>
