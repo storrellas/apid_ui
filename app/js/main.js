@@ -1,8 +1,3 @@
-
-// import 'https://unpkg.com/react@18/umd/react.production.min.js';
-// import 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
-// import '/vendor/axios/dist/axios.min.js';
-
 import React, {useEffect, useState, useRef} from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios/dist/axios.min.js';
@@ -41,40 +36,37 @@ const AppId = () => {
     sessionStorage.setItem('apid', JSON.stringify(apid))
   }
 
-  const apiMessage = async (message) => {
-    const messageListLocal = [...messageList]
-    messageListLocal.push({author: AUTHOR.ME, name: 'Me', message })
-    setMessageList([...messageListLocal ])
+  // const apiMessage = async (message) => {
+  //   const messageListLocal = [...messageList]
+  //   messageListLocal.push({author: AUTHOR.ME, name: 'Me', message })
+  //   setMessageList([...messageListLocal ])
 
-    // Update sessionStorage
-    refreshSessionStorage(messageListLocal)
+  //   // Update sessionStorage
+  //   refreshSessionStorage(messageListLocal)
 
-    // Do not launch multiple calls
-    if( loading ) return
-    setLoading(true)
-    // const conversation_history = messageListLocal.map( item => item.message)
-    // conversation_history.pop()
-    const body = {
-      data: {
-        type: "recommendation",
-        attributes: {
-          conversation_id: conversationIdRef.current,
-          product_type: message
-        }
-      }
-    }
-    const base_url = window.base_url?window.base_url:"https://apid.duckdns.org"
-    const response = await axios.post(`${base_url}/api/chat`, body)    
-    const json_response = response.data.data.attributes
-    messageListLocal.push({author: AUTHOR.BOT, message: json_response.body, name: json_response.name, html:''})
+  //   // Do not launch multiple calls
+  //   if( loading ) return
+  //   setLoading(true)
+  //   const body = {
+  //     data: {
+  //       type: "recommendation",
+  //       attributes: {
+  //         conversation_id: conversationIdRef.current,
+  //         product_type: message
+  //       }
+  //     }
+  //   }
+  //   const base_url = window.base_url?window.base_url:"https://apid.duckdns.org"
+  //   const response = await axios.post(`${base_url}/api/chat`, body)    
+  //   const json_response = response.data.data.attributes
+  //   messageListLocal.push({author: AUTHOR.BOT, message: json_response.body, name: json_response.name, html:''})
 
-    setMessageList(messageListLocal)
-    setLoading(false)
+  //   setMessageList(messageListLocal)
+  //   setLoading(false)
 
-
-    // Update sessionStorage
-    refreshSessionStorage(messageListLocal)
-  }
+  //   // Update sessionStorage
+  //   refreshSessionStorage(messageListLocal)
+  // }
 
   const wsMessage = async (message) => {
     const messageListLocal = [...messageList]
@@ -98,18 +90,9 @@ const AppId = () => {
     }
     console.log("body ", body)
     sendMessage(JSON.stringify(body))
-    messageListLocal.push({
-        author: AUTHOR.BOT, 
-        message: "", 
-        name: 'Bot', 
-        html: '<div>test</div>'
-    })
-    setMessageList(messageListLocal)
 
-
-
-    // Update sessionStorage
-    refreshSessionStorage(messageListLocal)
+    // // Update sessionStorage
+    // refreshSessionStorage(messageListLocal)
   }
 
   const onHideChat = () => {
@@ -167,7 +150,7 @@ const AppId = () => {
     const height = conversationContainer.current.clientHeight;
     const maxScrollTop = scrollHeight - height;
     conversationContainer.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-  }, [messageList])
+  }, [messageList, wsWordList.current.length])
 
   // const isJSON = (str) => {
   //   try {      
@@ -182,32 +165,22 @@ const AppId = () => {
     if (lastMessage != null) {      
       let lastMessageStr = lastMessage.data.replace(/"/g, "")
       console.log(`lastMessageStr '${lastMessageStr}'`)
-      // console.log("checking start frame ", /\[start=.*\]/.test(lastMessageStr))
-      // console.log("checking end frame ", /\[end=.*\]/.test(lastMessageStr))
       
 
       // Check message type
       if(/\[start=.*\]/.test(lastMessageStr)  === true){
-        // console.log("starting frame ...")
         messageOngoing.current = true    
-        // console.log("starting frame ...", messageOngoing.current, wsWordList.current) 
         wsWordList.current.length = 0
       }else if(/\[end=.*\]/.test(lastMessageStr) === true){
-        // console.log("ending frame ...", messageOngoing.current, wsWordList.current)
         messageOngoing.current = false
         setLoading(false)
       }else if(/{*}/.test(lastMessage.data)){
         // Do nothing
       }else{
-        
-
         // Display messages
-        const messageListLocal = JSON.parse(JSON.stringify(messageList))
-        const currentMessageLocal = messageListLocal[messageListLocal.length-1]
         if(lastMessageStr.includes('\\n') ) lastMessageStr = "<br></br>";
         wsWordList.current.push(lastMessageStr)
-        currentMessageLocal.message = currentMessageLocal.message + lastMessageStr
-        setMessageList( messageListLocal )
+
         //mark message ended
         messageOngoing.current = false
       }        
@@ -215,17 +188,15 @@ const AppId = () => {
   }, [lastMessage]);
 
   useEffect( () => {
-    // console.log("useEffect ", messageOngoing.current, wsWordList.current)
+    console.log("useEffect ", messageOngoing.current, wsWordList.current)
     if( messageOngoing.current === false && wsWordList.current.length > 0 ){
-      console.log("Processing ", wsWordList.current)
-      const messageListLocal = JSON.parse(JSON.stringify(messageList))
-      const currentMessageLocal = messageListLocal[messageListLocal.length-1]
-      currentMessageLocal.message = wsWordList.current.join('')
-      setMessageList( messageListLocal )
-      wsWordList.current.length = 0
-
+      const messageListLocal = [...messageList]
+      messageListLocal.push({author: AUTHOR.BOT, name: 'Bot', message: wsWordList.current.join('') })
+      setMessageList([...messageListLocal ])
+  
       // Update sessionStorage
       refreshSessionStorage(messageListLocal)
+      wsWordList.current.length = 0
     }
   }, [loading])
 
@@ -300,6 +271,17 @@ const AppId = () => {
                     </div>
                   </div> */}
                 </div>)}
+                {loading?
+                  <div className='appid-mt-3 appid-pe-2'>
+                  <div className={`w-100 appid-text-end`}>
+                    <b>Bot says:</b>
+                  </div>
+                  <div style={{ textAlign:'justify' }}>
+                    <div dangerouslySetInnerHTML={{__html: wsWordList.current.join('')}} />
+                  </div>
+                </div>  
+                :null}
+
               </div>
               
               <div className={loading?"appid-d-flex appid-justify-content-end appid-align-items-end":"appid-invisible"}>
