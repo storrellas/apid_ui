@@ -23,6 +23,7 @@ const AppId = () => {
   const [socketUrl, setSocketUrl] = useState('wss://apid.duckdns.org/ws/chat');
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
   const messageOngoing = useRef(false)
+  const wsWordList = useRef([])
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
@@ -178,36 +179,55 @@ const AppId = () => {
   // }
 
   useEffect(() => {
-    if (lastMessage != null) {
-      console.log("lastMessage.data ", lastMessage.data)
+    if (lastMessage != null) {      
       let lastMessageStr = lastMessage.data.replace(/"/g, "")
+      console.log(`lastMessageStr '${lastMessageStr}'`)
+      // console.log("checking start frame ", /\[start=.*\]/.test(lastMessageStr))
+      // console.log("checking end frame ", /\[end=.*\]/.test(lastMessageStr))
+      
+
       // Check message type
-      if(/[end=[0-9]*]\\n/.test(lastMessageStr) ){
+      if(/\[start=.*\]/.test(lastMessageStr)  === true){
+        // console.log("starting frame ...")
+        messageOngoing.current = true    
+        // console.log("starting frame ...", messageOngoing.current, wsWordList.current) 
+        wsWordList.current.length = 0
+      }else if(/\[end=.*\]/.test(lastMessageStr) === true){
+        // console.log("ending frame ...", messageOngoing.current, wsWordList.current)
         messageOngoing.current = false
         setLoading(false)
-      }else if(/[start=[0-9]*]\\n/.test(lastMessageStr)){
-        messageOngoing.current = true     
-      // }else if(isJSON(lastMessage.data)){
-      //   // Do nothing
       }else if(/{*}/.test(lastMessage.data)){
-        // mark message started
-        if(Object.keys(JSON.parse(lastMessage.data)).length == 0)
-          messageOngoing.current = true
+        // Do nothing
       }else{
+        
+
+        // Display messages
         const messageListLocal = JSON.parse(JSON.stringify(messageList))
         const currentMessageLocal = messageListLocal[messageListLocal.length-1]
-        if(lastMessageStr.includes('\n') ) lastMessageStr = "<br></br>";
+        if(lastMessageStr.includes('\\n') ) lastMessageStr = "<br></br>";
+        wsWordList.current.push(lastMessageStr)
         currentMessageLocal.message = currentMessageLocal.message + lastMessageStr
         setMessageList( messageListLocal )
-        // mark message ended
+        //mark message ended
         messageOngoing.current = false
-
-        // Update sessionStorage
-        refreshSessionStorage(messageListLocal)
-      }
-        
+      }        
     }
   }, [lastMessage]);
+
+  useEffect( () => {
+    // console.log("useEffect ", messageOngoing.current, wsWordList.current)
+    if( messageOngoing.current === false && wsWordList.current.length > 0 ){
+      console.log("Processing ", wsWordList.current)
+      const messageListLocal = JSON.parse(JSON.stringify(messageList))
+      const currentMessageLocal = messageListLocal[messageListLocal.length-1]
+      currentMessageLocal.message = wsWordList.current.join('')
+      setMessageList( messageListLocal )
+      wsWordList.current.length = 0
+
+      // Update sessionStorage
+      refreshSessionStorage(messageListLocal)
+    }
+  }, [loading])
 
   const Card = () => {
     return <div className='p-3' style={{ background: '#E6E6E6', borderRadius: '5px'}} role='button'
