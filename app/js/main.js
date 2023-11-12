@@ -19,6 +19,7 @@ const AppId = () => {
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
   const messageOngoing = useRef(false)
   const wsWordList = useRef([])
+  const productList = useRef(null)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
@@ -70,7 +71,7 @@ const AppId = () => {
 
   const wsMessage = async (message) => {
     const messageListLocal = [...messageList]
-    messageListLocal.push({author: AUTHOR.ME, name: 'Me', message })
+    messageListLocal.push({author: AUTHOR.ME, name: 'Me', message, product_list: [] })
     setMessageList([...messageListLocal ])
 
     // Update sessionStorage
@@ -141,7 +142,9 @@ const AppId = () => {
       const apid = JSON.parse(apid_str)
       conversationIdRef.current = apid.conversation_id
       setMessageList( apid.conversation_history )
-      setChatMode(CHAT_MODE.STANDARD)
+      const is_maximised = apid.conversation_history.some( item => item.product_list.length > 0 )
+      if(is_maximised) setChatMode(CHAT_MODE.MAXIFIED)
+      else setChatMode(CHAT_MODE.STANDARD)
     }
   }, [])
 
@@ -176,6 +179,8 @@ const AppId = () => {
         setLoading(false)
       }else if(/{*}/.test(lastMessage.data)){
         // Do nothing
+        const body = JSON.parse(lastMessage.data)
+        productList.current = body.product_list
       }else{
         // Display messages
         if(lastMessageStr.includes('\\n') ) lastMessageStr = "<br></br>";
@@ -188,11 +193,12 @@ const AppId = () => {
   }, [lastMessage]);
 
   useEffect( () => {
-    console.log("useEffect ", messageOngoing.current, wsWordList.current)
+    console.log("useEffect ", messageOngoing.current, wsWordList.current, productList.current)
     if( messageOngoing.current === false && wsWordList.current.length > 0 ){
       const messageListLocal = [...messageList]
-      messageListLocal.push({author: AUTHOR.BOT, name: 'Bot', message: wsWordList.current.join('') })
+      messageListLocal.push({author: AUTHOR.BOT, name: 'Bot', message: wsWordList.current.join(''), product_list: productList.current })
       setMessageList([...messageListLocal ])
+      if( productList.current.length > 0 ) setChatMode(CHAT_MODE.MAXIFIED)
   
       // Update sessionStorage
       refreshSessionStorage(messageListLocal)
@@ -200,31 +206,34 @@ const AppId = () => {
     }
   }, [loading])
 
-  const Card = () => {
-    return <div className='p-3' style={{ background: '#E6E6E6', borderRadius: '5px'}} role='button'
-              onClick={() => window.location = 'https://runningwarehouse.duckdns.org/Altra_Mens_Trail_Running_Shoes/catpage-ALTRAMTS.html'}>
+  const Card = (props) => {
+    const starsOn = props.data.stars>0?Math.floor(props.data.stars):0
+    const starsOff = props.data.stars>0?5-Math.floor(props.data.stars):5
+    return <div className='p-3 h-100 d-flex flex-column' style={{ background: '#E6E6E6', borderRadius: '5px'}} role='button'
+              onClick={() => window.location = props.data.url}>
               <div>
-                <div><b>New Balance FuelCell</b></div>
-                <b>349.95€</b>
+                <div><b>{props.data.title}</b></div>
+                <b>{props.data.price}€</b>
               </div>
-              <div className='d-flex mt-2'>
+              <div className='d-flex mt-2 flex-grow-1'>
                 <div className='w-50' style={{ fontSize:'12px'}}>                
                   <div className='w-100 multiline-ellipsis' style={{ textAlign: 'justify'}}>                
-                    Formerly named the FuelCell RC Elite, The FuelCell SuperComp Elite V3 is built for speed and is the pinnacle model of the SuperComp family. The SC Elite V3 is built around Energy Arc. Energy Arc technology features a unique bowed carbon fiber plate geometry with a strategic void in the midsole to deliver exceptionally high levels of energy return. This technology delivers a smoother and faster ride compared to previous models.
+                    {props.data.description}
                   </div>
                   <div className="d-flex justify-content-between align-items-center" style={{ color: '#F8D64E'}}>
-                    <i className='fa-solid fa-star'></i>
-                    <i className='fa-solid fa-star'></i>
-                    <i className='fa-solid fa-star'></i>
-                    <i className='fa-solid fa-star'></i>
-                    <i className='fa-regular fa-star'></i>
-                    <div style={{ color: 'black'}}>(4/5)</div>                            
+                    {[...Array(starsOn)].map((item, idx) =>
+                      <i key={idx} className='fa-solid fa-star'></i>
+                    )}
+                    {[...Array(starsOff)].map((item, idx) =>
+                      <i key={idx} className='fa-regular fa-star'></i>
+                    )}
+                    <div style={{ color: 'black'}}>({starsOn}/5)</div>                            
                   </div>
-                  <small>31 votes</small>
+                  {/* <small>31 votes</small> */}
                 </div>
-                <div className='w-50 text-center d-flex justify-content-center align-items-center ps-3'>
-                  <img className="appid-w-100" style={{ borderRadius: '5px', border: '2px solid #B3B3B3'}}
-                    src="https://img.runningwarehouse.com.au/watermark/rs.php?path=NSCE3M7-1.jpg&nw=210"></img>                        
+                <div className='w-50 ps-3'>
+                  <img className="w-100" style={{ borderRadius: '5px', border: '2px solid #B3B3B3'}}
+                    src={props.data.image_link}></img>                        
                 </div>
               </div>
             </div>
@@ -241,7 +250,14 @@ const AppId = () => {
                 <div className='appid-flex-grow-1 appid-text-center'>
                   <img src="https://apid.duckdns.org/apid/img/logo.png" height={40} width={130} alt=''></img>
                 </div>
-                <i role="button" className="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
+                <div>
+                  {chatMode==CHAT_MODE.MAXIFIED?
+                  <i role="button" className="fa-solid fa-minimize me-2"  onClick={() => setChatMode(CHAT_MODE.STANDARD)}/>
+                  :
+                  <i role="button" className="fa-solid fa-maximize me-2"  onClick={() => setChatMode(CHAT_MODE.MAXIFIED)}/>
+                  }
+                  <i role="button" className="fa fa-times" aria-hidden="true" onClick={() => onHideChat()}></i>
+                </div>
               </div>
               <div ref={conversationContainer} className='appid-flex-grow-1 appid-mt-3 appid-mb-3 rcv-msg-container' style={{ overflowY: 'auto'}}>
                 {messageList.map( (item,idx) =>
@@ -252,24 +268,15 @@ const AppId = () => {
                   <div style={{ textAlign:'justify' }} key={idx}>
                     <div dangerouslySetInnerHTML={{__html: item.message}} />
                   </div>
-                  {/* <div className='appid-w-100 appid-mt-3'>
-                    <div className='d-flex'>
-                      <div className='w-50 me-1'>
-                        <Card />
-                      </div>
-                      <div className='ms-1 w-50'>
-                        <Card />
-                      </div>
+                  <div className='appid-w-100 appid-mt-3'>
+                    <div className='d-flex flex-wrap'>
+                      {item.product_list.map( (item, idx) => 
+                        <div className='w-50 p-1' key={idx}>
+                          <Card data={item} />
+                        </div>
+                      )}
                     </div>
-                    <div className='d-flex mt-3'>
-                      <div className='w-50 me-1'>
-                        <Card />
-                      </div>
-                      <div className='ms-1 w-50'>
-                        <Card />
-                      </div>
-                    </div>
-                  </div> */}
+                  </div>
                 </div>)}
                 {loading?
                   <div className='appid-mt-3 appid-pe-2'>
@@ -289,7 +296,7 @@ const AppId = () => {
               </div>
               
               <div className='appid-d-flex appid-align-items-center appid-justify-content-center input-msg-container'>
-                <input value={message}
+                <input value={message} disabled={loading}
                   className="input-msg" type="text" 
                   onChange={(e) => setMessage(e.target.value)} 
                   onKeyDown={(e) => onKeyDownMessage(e)}/>
