@@ -180,7 +180,7 @@ const AppId = () => {
       }else if(/{*}/.test(lastMessage.data)){
         // Do nothing
         const body = JSON.parse(lastMessage.data)
-        productList.current = body.product_list
+        productList.current = body.product_list.slice(0,4)
       }else{
         // Display messages
         if(lastMessageStr.includes('\\n') ) lastMessageStr = "<br></br>";

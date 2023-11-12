@@ -87,7 +87,6 @@
 
 .show-chat{
   animation: show-chat-expand 0.3s;
-
 }
 @keyframes show-chat-expand {
   0% {
@@ -99,6 +98,7 @@
     height: 600px;
   }
 }
+
 .hide-chat{
   animation: hide-chat-shrink 0.3s;
 }
@@ -112,6 +112,21 @@
     height: 0;
   }
 }
+
+/* .chat-container{
+  animation: show-chat-expand 0.3s;
+}
+@keyframes show-chat-expand  {
+  0% {
+    width: 0;
+    height: 0;
+  }
+  100% {
+    width: 400px;
+    height: 600px;
+  }
+} */
+
 
 /* Bootstrap like CSS */
 .appid-w-100{
