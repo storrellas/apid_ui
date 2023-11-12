@@ -229,7 +229,6 @@ const AppId = () => {
                     )}
                     <div style={{ color: 'black'}}>({starsOn}/5)</div>                            
                   </div>
-                  {/* <small>31 votes</small> */}
                 </div>
                 <div className='w-50 ps-3'>
                   <img className="w-100" style={{ borderRadius: '5px', border: '2px solid #B3B3B3'}}
