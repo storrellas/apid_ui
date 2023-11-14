@@ -8,7 +8,7 @@ on:
   # # workflow_dispatch:
   push:
     branches:
-      - main
+      - master
 
 # # See https://docs.github.com/en/actions/learn-github-actions/variables
 # env:
