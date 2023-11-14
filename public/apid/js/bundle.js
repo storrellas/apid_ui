@@ -38,7 +38,9 @@ var CHAT_MODE = {
 var MediaRederingComponent = function MediaRederingComponent(_ref) {
   var type = _ref.type,
     mediaArrayElements = _ref.mediaArrayElements,
-    _onClick = _ref.onClick;
+    _onClick = _ref.onClick,
+    setCheckout = _ref.setCheckout,
+    title = _ref.title;
   console.log({
     type: type
   });
@@ -166,6 +168,127 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
         }, "Colors: ", ele.color.join(","), " ")));
       }) : ""));
       break;
+    case "products_recommended":
+      return /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("p", {
+        style: {
+          fontWeight: 700,
+          fontSize: 14,
+          textDecoration: "underline"
+        }
+      }, "Recommnded Products"), /*#__PURE__*/_react["default"].createElement("div", {
+        style: {
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap"
+        }
+      }, mediaArrayElements.length > 0 ? mediaArrayElements.map(function (ele) {
+        return /*#__PURE__*/_react["default"].createElement("div", {
+          style: {
+            display: "flex",
+            color: "inherit",
+            textDecoration: "none",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "30%",
+            boxShadow: "0 0 0 1px black",
+            marginBottom: 10,
+            marginRight: "1%",
+            background: "#fff",
+            cursor: "pointer",
+            "&:hover": {
+              transform: "scale(-0.2)"
+            }
+          }
+        }, /*#__PURE__*/_react["default"].createElement("a", {
+          onClick: function onClick() {
+            return _onClick({
+              url: ele.product_page_url
+            });
+          },
+          style: {
+            display: "flex",
+            color: "inherit",
+            textDecoration: "none",
+            flexDirection: "column",
+            alignItems: "center",
+            // width: "30%",
+            // boxShadow: "0 0 0 1px black",
+            marginBottom: 10,
+            marginRight: "1%",
+            background: "#fff",
+            cursor: "pointer",
+            "&:hover": {
+              transform: "scale(-0.2)"
+            }
+          }
+        }, /*#__PURE__*/_react["default"].createElement("div", {
+          style: {
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "start",
+            justifyContent: "space-between",
+            padding: 5,
+            width: "100%"
+          }
+        }, /*#__PURE__*/_react["default"].createElement("p", {
+          style: {
+            fontWeight: 700,
+            margin: 0,
+            marginBottom: 2,
+            fontSize: 14,
+            flex: 1
+          }
+        }, ele.title, " "), ele.discount && /*#__PURE__*/_react["default"].createElement("span", {
+          style: {
+            background: "green",
+            padding: "0px 8px",
+            borderRadius: "50px",
+            color: "#fff",
+            fontWeight: 500
+          }
+        }, ele.discount), /*#__PURE__*/_react["default"].createElement("p", {
+          style: {
+            fontWeight: 700,
+            margin: 0,
+            marginBottom: 2,
+            fontSize: 14
+          }
+        }, "\u20AC", ele.price)), /*#__PURE__*/_react["default"].createElement("div", {
+          style: {
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center"
+          }
+        }, /*#__PURE__*/_react["default"].createElement("div", {
+          style: {
+            padding: 5
+          }
+        }, /*#__PURE__*/_react["default"].createElement("img", {
+          src: ele.image_url ? ele.image_url : "",
+          style: {
+            width: "100px"
+          },
+          alt: "Product Image "
+        })))), /*#__PURE__*/_react["default"].createElement("div", {
+          style: {
+            paddingBottom: 15
+          }
+        }, /*#__PURE__*/_react["default"].createElement("a", {
+          onClick: function onClick() {
+            return setCheckout(true);
+          },
+          style: {
+            padding: "5px 15px",
+            textDecoration: "none",
+            background: "#1877F2",
+            color: "#fff",
+            borderRadius: "50px",
+            fontWeight: 600
+          }
+        }, "Add to basket")));
+      }) : ""));
+      break;
     case "customer_review":
       return /*#__PURE__*/_react["default"].createElement("div", {
         style: {
@@ -263,6 +386,44 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
         allowfullscreen: true
       })));
       break;
+    case "cart_image":
+      return /*#__PURE__*/_react["default"].createElement("div", {
+        style: {
+          marginTop: 5
+        }
+      }, /*#__PURE__*/_react["default"].createElement("div", {
+        style: {
+          width: "100%",
+          display: "flex",
+          flexDirection: "column"
+        }
+      }, /*#__PURE__*/_react["default"].createElement("img", {
+        onClick: function onClick() {
+          return setCheckout(true);
+        },
+        src: mediaArrayElements,
+        alt: "Cart Image",
+        width: "100%"
+      })));
+    case "recommended_tours":
+      return /*#__PURE__*/_react["default"].createElement("div", {
+        style: {
+          marginTop: 5
+        }
+      }, mediaArrayElements.map(function (m) {
+        return /*#__PURE__*/_react["default"].createElement("div", {
+          style: {
+            width: "100%",
+            display: "flex",
+            flexDirection: "column"
+          }
+        }, /*#__PURE__*/_react["default"].createElement("img", {
+          src: m,
+          alt: "Cart Image",
+          width: "100%"
+        }));
+      }));
+      break;
     case "list":
       return /*#__PURE__*/_react["default"].createElement("div", {
         style: {
@@ -274,7 +435,7 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
           fontSize: 14,
           textDecoration: "underline"
         }
-      }, "Best Use"), /*#__PURE__*/_react["default"].createElement("div", {
+      }, title), /*#__PURE__*/_react["default"].createElement("div", {
         style: {
           width: "100%",
           display: "flex",
@@ -318,6 +479,10 @@ var AppId = function AppId() {
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     isChatOpen = _React$useState4[0],
     setIsChatOpen = _React$useState4[1];
+  var _React$useState5 = _react["default"].useState(false),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    showCheckOutImage = _React$useState6[0],
+    setShowCheckOutImage = _React$useState6[1];
   var handleMediaVisited = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref2) {
       var url;
@@ -339,6 +504,27 @@ var AppId = function AppId() {
       return _ref3.apply(this, arguments);
     };
   }();
+  var setCheckout = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(checkout) {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            if (!checkout) {
+              _context2.next = 3;
+              break;
+            }
+            _context2.next = 3;
+            return wsMessage("cart_image", false);
+          case 3:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2);
+    }));
+    return function setCheckout(_x2) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
   var conversationIdRef = (0, _react.useRef)((0, _uuid.v4)());
   var conversationContainer = (0, _react.useRef)();
   var _useState11 = (0, _react.useState)('wss://apid.duckdns.org/ws/chat'),
@@ -357,6 +543,9 @@ var AppId = function AppId() {
   var bestUse = (0, _react.useRef)(null);
   var surface = (0, _react.useRef)(null);
   var youtubeUrl = (0, _react.useRef)(null);
+  var productsRecommended = (0, _react.useRef)(null);
+  var cartImageLink = (0, _react.useRef)(null);
+  var recommendedTours = (0, _react.useRef)(null);
   var connectionStatus = (_ReadyState$CONNECTIN = {}, _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.CONNECTING, 'Connecting'), _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.OPEN, 'Open'), _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.CLOSING, 'Closing'), _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.CLOSED, 'Closed'), _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.UNINSTANTIATED, 'Uninstantiated'), _ReadyState$CONNECTIN)[readyState];
   var refreshSessionStorage = function refreshSessionStorage(messageList) {
     var apid = {
@@ -422,17 +611,17 @@ var AppId = function AppId() {
   // }
 
   var wsMessage = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(message) {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(message) {
       var showInChat,
         mylocation,
         hash,
         messageListLocal,
         body,
-        _args2 = arguments;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
+        _args3 = arguments;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            showInChat = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : true;
+            showInChat = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : true;
             mylocation = window.location.pathname;
             hash = window.location.hash;
             messageListLocal = _toConsumableArray(messageList);
@@ -449,10 +638,10 @@ var AppId = function AppId() {
 
             // Do not launch multiple calls
             if (!loading) {
-              _context2.next = 9;
+              _context3.next = 9;
               break;
             }
-            return _context2.abrupt("return");
+            return _context3.abrupt("return");
           case 9:
             setLoading(true);
             body = {
@@ -462,21 +651,23 @@ var AppId = function AppId() {
                   conversation_id: conversationIdRef.current,
                   product_type: message,
                   url: "".concat(window.location.href)
+                  // url: `https://runningwarehouse.duckdns.org/Brooks_Catamount_2/descpage-BRCA2M3.html`
                 }
               }
             };
+
             sendMessage(JSON.stringify(body));
 
             // // Update sessionStorage
             // refreshSessionStorage(messageListLocal)
           case 12:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
-      }, _callee2);
+      }, _callee3);
     }));
-    return function wsMessage(_x2) {
-      return _ref4.apply(this, arguments);
+    return function wsMessage(_x3) {
+      return _ref5.apply(this, arguments);
     };
   }();
   var onHideChat = function onHideChat() {
@@ -550,9 +741,11 @@ var AppId = function AppId() {
       var lastMessageStr = lastMessage.data.replace(/"/g, "");
       // Check message type
       if (/\[start=.*\]/.test(lastMessageStr) === true) {
+        console.log("I am in start block");
         messageOngoing.current = true;
         wsWordList.current.length = 0;
       } else if (/\[end=.*\]/.test(lastMessageStr) === true) {
+        console.log("I am in end block");
         messageOngoing.current = false;
         setLoading(false);
       } else if (/{*}/.test(lastMessage.data)) {
@@ -579,6 +772,16 @@ var AppId = function AppId() {
         if (body.youtube_url) {
           youtubeUrl.current = body.youtube_url;
         }
+        if (body.products_recommended) {
+          productsRecommended.current = body.products_recommended;
+        }
+        if (body.image_link) {
+          cartImageLink.current = body.image_link;
+        }
+        if (body.recommended_tours) {
+          recommendedTours.current = body.recommended_tours;
+        }
+        setLoading(false);
       } else {
         // Display messages
         if (lastMessageStr.includes('\\n')) lastMessageStr = "<br></br>";
@@ -590,6 +793,7 @@ var AppId = function AppId() {
     }
   }, [lastMessage]);
   (0, _react.useEffect)(function () {
+    console.log("Asad", cartImageLink.current, " ", wsWordList.current.length);
     if (messageOngoing.current === false && wsWordList.current.length > 0) {
       var messageListLocal = _toConsumableArray(messageList);
       messageListLocal.push({
@@ -600,8 +804,11 @@ var AppId = function AppId() {
         customer_comments: customerComments.current,
         key_features: keyFeatures.current,
         best_use: bestUse.current,
-        surfaceF: surface.current,
+        surface: surface.current,
         youtube_url: youtubeUrl.current,
+        products_recommended: productsRecommended.current,
+        image_link: cartImageLink.current,
+        recommended_tours: recommendedTours.current,
         showInChat: true
       });
       setMessageList(_toConsumableArray(messageListLocal));
@@ -610,6 +817,28 @@ var AppId = function AppId() {
       // Update sessionStorage
       refreshSessionStorage(messageListLocal);
       wsWordList.current.length = 0;
+    } else if (messageOngoing.current === false && (cartImageLink.current || recommendedTours.current)) {
+      var _messageListLocal = _toConsumableArray(messageList);
+      _messageListLocal.push({
+        author: AUTHOR.BOT,
+        name: 'Bot',
+        message: null,
+        product_list: productList.current,
+        customer_comments: customerComments.current,
+        key_features: keyFeatures.current,
+        best_use: bestUse.current,
+        surface: surface.current,
+        youtube_url: youtubeUrl.current,
+        products_recommended: productsRecommended.current,
+        image_link: cartImageLink.current,
+        recommended_tours: recommendedTours.current,
+        showInChat: true
+      });
+      setMessageList(_toConsumableArray(_messageListLocal));
+      // if (productList.current.length > 0) setChatMode(CHAT_MODE.MAXIFIED)
+
+      // Update sessionStorage
+      refreshSessionStorage(_messageListLocal);
     }
   }, [loading]);
 
@@ -732,7 +961,7 @@ var AppId = function AppId() {
   }, "Hi! I'm your smart sales assistant, here to help and guide you through our store. Running shoes are our speciality. How can I assist you today?")), messageList.filter(function (item) {
     return item.showInChat;
   }).map(function (item, idx) {
-    return /*#__PURE__*/_react["default"].createElement("div", {
+    return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("div", {
       key: idx,
       style: {
         background: item.author.toUpperCase() === AUTHOR.ME ? "#4286f4" : "#eef2f3",
@@ -759,7 +988,7 @@ var AppId = function AppId() {
       dangerouslySetInnerHTML: {
         __html: item.message
       }
-    })), item.product_list && item.product_list.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
+    }))), item.product_list && item.product_list.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
       style: {
         marginTop: 5,
         marginBottom: 5
@@ -775,6 +1004,7 @@ var AppId = function AppId() {
       }
     }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
       type: "list",
+      title: "Best Use",
       mediaArrayElements: item.best_use,
       onClick: {}
     })), item.surface && item.surface.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
@@ -784,6 +1014,7 @@ var AppId = function AppId() {
       }
     }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
       type: "list",
+      title: "Surface",
       mediaArrayElements: item.surface,
       onClick: {}
     })), item.key_features && item.key_features.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
@@ -793,16 +1024,17 @@ var AppId = function AppId() {
       }
     }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
       type: "list",
+      title: "Key Features",
       mediaArrayElements: item.key_features,
       onClick: {}
-    })), item.customer_review && item.customer_review.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
+    })), item.customer_comments && item.customer_comments.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
       style: {
         marginTop: 5,
         marginBottom: 5
       }
     }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
       type: "customer_review",
-      mediaArrayElements: item.customer_review,
+      mediaArrayElements: item.customer_comments,
       onClick: handleMediaVisited
     })), item.youtube_url && /*#__PURE__*/_react["default"].createElement("div", {
       style: {
@@ -813,8 +1045,89 @@ var AppId = function AppId() {
       type: "youtube",
       mediaArrayElements: item.youtube_url,
       onClick: handleMediaVisited
+    })), item.products_recommended && item.products_recommended.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
+      style: {
+        marginTop: 5,
+        marginBottom: 5
+      }
+    }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
+      type: "products_recommended",
+      mediaArrayElements: item.products_recommended,
+      onClick: handleMediaVisited,
+      setCheckout: setCheckout
+    })), item.image_link && /*#__PURE__*/_react["default"].createElement("div", {
+      style: {
+        marginTop: 5,
+        marginBottom: 5
+      }
+    }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
+      type: "cart_image",
+      mediaArrayElements: item.image_link,
+      onClick: handleMediaVisited,
+      setCheckout: /*#__PURE__*/function () {
+        var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(check) {
+          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+            while (1) switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+                if (!check) {
+                  _context4.next = 4;
+                  break;
+                }
+                _context4.next = 4;
+                return wsMessage("recommended_tours", false);
+              case 4:
+                _context4.next = 9;
+                break;
+              case 6:
+                _context4.prev = 6;
+                _context4.t0 = _context4["catch"](0);
+                console.log(_context4.t0);
+              case 9:
+              case "end":
+                return _context4.stop();
+            }
+          }, _callee4, null, [[0, 6]]);
+        }));
+        return function (_x4) {
+          return _ref6.apply(this, arguments);
+        };
+      }()
+    })), item.recommended_tours && item.recommended_tours.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
+      style: {
+        marginTop: 5,
+        marginBottom: 5
+      }
+    }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
+      type: "recommended_tours",
+      mediaArrayElements: item.recommended_tours,
+      onClick: handleMediaVisited,
+      setCheckout: /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) switch (_context5.prev = _context5.next) {
+            case 0:
+            case "end":
+              return _context5.stop();
+          }
+        }, _callee5);
+      }))
     })));
-  }), loading && wsWordList.current.length > 0 ? /*#__PURE__*/_react["default"].createElement("div", {
+  }), showCheckOutImage && /*#__PURE__*/_react["default"].createElement("div", {
+    style: {
+      background: item.author.toUpperCase() === AUTHOR.ME ? "#4286f4" : "#eef2f3",
+      color: item.author.toUpperCase() === AUTHOR.ME ? "#fff" : "#000",
+      padding: "10px 15px",
+      borderRadius: 10,
+      maxWidth: "90%",
+      minWidth: "fit-content",
+      width: "fit-content",
+      marginLeft: item.author.toUpperCase() === AUTHOR.ME ? "auto" : "inherit",
+      fontSize: 12
+    }
+  }, /*#__PURE__*/_react["default"].createElement("img", {
+    src: "https://assets-global.website-files.com/605826c62e8de87de744596e/622b2227ad990d96b624fda6_gDtOBigUgnYBqCX6RkRU7PGBWt0DyTUWX5rwJNofy1C61OLiF-mueVP0KhNxKpC3u6JxUscqtQpWvuAU6C4qZexw41rs44Afhpu87AT1aDpQC2C9VJFPw8rX-Rg8EuZIGySGE5oB.jpeg",
+    alt: "checkout image"
+  })), loading && wsWordList.current.length > 0 ? /*#__PURE__*/_react["default"].createElement("div", {
     style: {
       background: "#eef2f3",
       padding: "10px 15px",
