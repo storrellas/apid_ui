@@ -37,8 +37,8 @@ jobs:
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          username: deploy
+          password: deploy
           source: "public/*"
           target: /home/ubuntu/workspace/apid_ui
 
