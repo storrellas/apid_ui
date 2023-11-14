@@ -1,7 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var _react = _interopRequireWildcard(require("react"));
 var _client = _interopRequireDefault(require("react-dom/client"));
 var _axiosMin = _interopRequireDefault(require("axios/dist/axios.min.js"));
@@ -10,6 +9,7 @@ var _reactUseWebsocket = _interopRequireWildcard(require("react-use-websocket"))
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
@@ -72,6 +72,7 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
             marginBottom: 10,
             marginRight: "2%",
             background: "#fff",
+            cursor: "pointer",
             "&:hover": {
               transform: "scale(-0.2)"
             }
@@ -87,15 +88,15 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
           }
         }, /*#__PURE__*/_react["default"].createElement("p", {
           style: {
-            fontWeight: 700,
+            fontWeight: 500,
             margin: 0,
             marginBottom: 2,
-            fontSize: 14,
+            fontSize: 10,
             flex: 1
           }
         }, ele.title, " ", /*#__PURE__*/_react["default"].createElement("span", {
           style: {
-            background: "#f00",
+            background: "green",
             padding: "0px 8px",
             borderRadius: "50px",
             color: "#fff",
@@ -158,21 +159,7 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
           style: {
             color: 'black'
           }
-        }, "Colors: ", ele.color.map(function (c) {
-          return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("i", {
-            className: "fas fa-circle",
-            style: {
-              color: c,
-              fontSize: '1em',
-              border: "1px solid #000",
-              borderRadius: "50%",
-              textAlign: "center",
-              width: 10,
-              height: 10,
-              overflow: 'hidden'
-            }
-          }), "\xA0");
-        }), " ")));
+        }, "Colors: ", ele.color.join(","), " ")));
       }) : ""));
       break;
     case "customer_review":
@@ -186,7 +173,7 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
           fontSize: 14,
           textDecoration: "underline"
         }
-      }, "Customer Reviews"), /*#__PURE__*/_react["default"].createElement("div", {
+      }, "Customer Comments"), /*#__PURE__*/_react["default"].createElement("div", {
         style: {
           width: "100%",
           display: "flex",
@@ -227,14 +214,14 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
           }
         }, /*#__PURE__*/_react["default"].createElement("i", {
           "class": "fas fa-user-o"
-        }), " \xA0", ele.title), /*#__PURE__*/_react["default"].createElement("p", {
+        }), " \xA0", ele.name), /*#__PURE__*/_react["default"].createElement("p", {
           style: {
             fontWeight: 700,
             margin: 0,
             marginBottom: 2,
             fontSize: 14
           }
-        }, "\u20AC", ele.price)), /*#__PURE__*/_react["default"].createElement("div", {
+        }, ele.date)), /*#__PURE__*/_react["default"].createElement("div", {
           style: {
             padding: 5
           }
@@ -242,7 +229,7 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
           style: {
             margin: 0
           }
-        }, ele.description)));
+        }, ele.comment)));
       }) : ""));
       break;
     case "youtube":
@@ -250,7 +237,7 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
         style: {
           marginTop: 5
         }
-      }, /*#__PURE__*/_react["default"].createElement("p", {
+      }, console.log("youtube url found"), /*#__PURE__*/_react["default"].createElement("p", {
         style: {
           fontWeight: 700,
           fontSize: 14,
@@ -270,6 +257,27 @@ var MediaRederingComponent = function MediaRederingComponent(_ref) {
           height: "250px"
         }
       })));
+      break;
+    case "list":
+      return /*#__PURE__*/_react["default"].createElement("div", {
+        style: {
+          marginTop: 5
+        }
+      }, console.log("youtube url found"), /*#__PURE__*/_react["default"].createElement("p", {
+        style: {
+          fontWeight: 700,
+          fontSize: 14,
+          textDecoration: "underline"
+        }
+      }, "Best Use"), /*#__PURE__*/_react["default"].createElement("div", {
+        style: {
+          width: "100%",
+          display: "flex",
+          flexDirection: "column"
+        }
+      }, /*#__PURE__*/_react["default"].createElement("ol", null, mediaArrayElements.map(function (ele) {
+        return /*#__PURE__*/_react["default"].createElement("li", null, ele);
+      }))));
       break;
     default:
       break;
@@ -339,6 +347,10 @@ var AppId = function AppId() {
   var messageOngoing = (0, _react.useRef)(false);
   var wsWordList = (0, _react.useRef)([]);
   var productList = (0, _react.useRef)(null);
+  var customerComments = (0, _react.useRef)(null);
+  var keyFeatures = (0, _react.useRef)(null);
+  var bestUse = (0, _react.useRef)(null);
+  var surface = (0, _react.useRef)(null);
   var connectionStatus = (_ReadyState$CONNECTIN = {}, _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.CONNECTING, 'Connecting'), _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.OPEN, 'Open'), _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.CLOSING, 'Closing'), _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.CLOSED, 'Closed'), _defineProperty(_ReadyState$CONNECTIN, _reactUseWebsocket.ReadyState.UNINSTANTIATED, 'Uninstantiated'), _ReadyState$CONNECTIN)[readyState];
   var refreshSessionStorage = function refreshSessionStorage(messageList) {
     var apid = {
@@ -411,10 +423,6 @@ var AppId = function AppId() {
           case 0:
             mylocation = window.location.pathname;
             hash = window.location.hash;
-            console.log({
-              mylocation: mylocation,
-              hash: hash
-            });
             messageListLocal = _toConsumableArray(messageList);
             messageListLocal.push({
               author: AUTHOR.ME,
@@ -428,26 +436,27 @@ var AppId = function AppId() {
 
             // Do not launch multiple calls
             if (!loading) {
-              _context2.next = 9;
+              _context2.next = 8;
               break;
             }
             return _context2.abrupt("return");
-          case 9:
+          case 8:
             setLoading(true);
             body = {
               data: {
                 type: "recommendation",
                 attributes: {
                   conversation_id: conversationIdRef.current,
-                  product_type: message
+                  product_type: message,
+                  url: "".concat(window.location.href)
                 }
               }
-            }; // console.log("body ", body)
+            };
             sendMessage(JSON.stringify(body));
 
             // // Update sessionStorage
             // refreshSessionStorage(messageListLocal)
-          case 12:
+          case 11:
           case "end":
             return _context2.stop();
         }
@@ -519,6 +528,10 @@ var AppId = function AppId() {
 
   (0, _react.useEffect)(function () {
     if (lastMessage != null) {
+      console.log({
+        "typeof": _typeof(lastMessage),
+        lastMessage: lastMessage.data
+      });
       var lastMessageStr = lastMessage.data.replace(/"/g, "");
       // Check message type
       if (/\[start=.*\]/.test(lastMessageStr) === true) {
@@ -530,8 +543,23 @@ var AppId = function AppId() {
       } else if (/{*}/.test(lastMessage.data)) {
         // Do nothing
         var body = JSON.parse(lastMessage.data);
+        console.log({
+          body: body
+        });
         if (body.product_list) {
-          productList.current = body.product_list.slice(0, 4);
+          productList.current = body.product_list;
+        }
+        if (body.customer_comments) {
+          customerComments.current = body.customer_comments;
+        }
+        if (body.key_features) {
+          keyFeatures.current = body.key_features;
+        }
+        if (body.best_use) {
+          bestUse.current = body.best_use;
+        }
+        if (body.surface) {
+          surface.current = body.surface;
         }
       } else {
         // Display messages
@@ -550,7 +578,11 @@ var AppId = function AppId() {
         author: AUTHOR.BOT,
         name: 'Bot',
         message: wsWordList.current.join(''),
-        product_list: productList.current
+        product_list: productList.current,
+        customer_comments: customerComments.current,
+        key_features: keyFeatures.current,
+        best_use: bestUse.current,
+        surfaceF: surface.current
       });
       setMessageList(_toConsumableArray(messageListLocal));
       // if (productList.current.length > 0) setChatMode(CHAT_MODE.MAXIFIED)
@@ -629,13 +661,13 @@ var AppId = function AppId() {
       background: "#212529"
     }
   }, /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("img", {
-    style: {
-      filter: "invert"
-    },
     src: "https://apid.duckdns.org/apid/img/logo.png",
     height: 20,
     width: 80,
-    alt: ""
+    alt: "",
+    style: {
+      filter: "invert(1)"
+    }
   })), /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("i", {
     role: "button",
     className: "fa fa-times",
@@ -714,6 +746,33 @@ var AppId = function AppId() {
       type: "product",
       mediaArrayElements: item.product_list,
       onClick: handleMediaVisited
+    })), item.best_use && item.best_use.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
+      style: {
+        marginTop: 5,
+        marginBottom: 5
+      }
+    }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
+      type: "list",
+      mediaArrayElements: item.best_use,
+      onClick: {}
+    })), item.surface && item.surface.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
+      style: {
+        marginTop: 5,
+        marginBottom: 5
+      }
+    }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
+      type: "list",
+      mediaArrayElements: item.surface,
+      onClick: {}
+    })), item.key_features && item.key_features.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
+      style: {
+        marginTop: 5,
+        marginBottom: 5
+      }
+    }, /*#__PURE__*/_react["default"].createElement(MediaRederingComponent, {
+      type: "list",
+      mediaArrayElements: item.key_features,
+      onClick: {}
     })), item.customer_review && item.customer_review.length > 0 && /*#__PURE__*/_react["default"].createElement("div", {
       style: {
         marginTop: 5,
@@ -739,7 +798,7 @@ var AppId = function AppId() {
       padding: "10px 15px",
       borderRadius: 10,
       maxWidth: "80%",
-      minWidth: "min-content",
+      minWidth: "fit-content",
       width: "fit-content",
       marginLeft: "inherit"
     }
