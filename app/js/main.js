@@ -39,7 +39,7 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
                   marginBottom: 10,
                   marginRight: "2%",
                   background: "#fff",
-                  cursor:"pointer",
+                  cursor: "pointer",
                   "&:hover": {
                     transform: "scale(-0.2)"
                   }
@@ -256,9 +256,7 @@ const AppId = () => {
   const [isChatOpen, setIsChatOpen] = React.useState(false)
 
   const handleMediaVisited = async ({ url }) => {
-    await wsMessage(
-      `I am vieweing Product: ${url} `
-    )
+    await wsMessage(`I am vieweing Product: ${url} `, false)
     window.location.assign(url)
   }
 
@@ -342,13 +340,13 @@ const AppId = () => {
   //   refreshSessionStorage(messageListLocal)
   // }
 
-  const wsMessage = async (message) => {
+  const wsMessage = async (message, showInChat = true) => {
 
     const mylocation = window.location.pathname
     const hash = window.location.hash
 
     const messageListLocal = [...messageList]
-    messageListLocal.push({ author: AUTHOR.ME, message, current_location: `${mylocation}${hash}` })
+    messageListLocal.push({ author: AUTHOR.ME, message, showInChat, current_location: `${mylocation}${hash}` })
     setMessageList([...messageListLocal])
 
     // Update sessionStorage
@@ -427,12 +425,15 @@ const AppId = () => {
     }
   }, [])
 
-  // useEffect(() => {
-  //   const scrollHeight = conversationContainer?.current?.scrollHeight;
-  //   const height = conversationContainer?.current?.clientHeight;
-  //   const maxScrollTop = scrollHeight - height;
-  //   conversationContainer?.current?.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-  // }, [messageList, wsWordList.current.length])
+  useEffect(() => {
+    // console.log({conversationContainer})
+   if(isChatOpen){
+    const scrollHeight = conversationContainer.current.scrollHeight;
+    const height = conversationContainer.current.clientHeight;
+    const maxScrollTop = scrollHeight - height;
+    conversationContainer.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+   }
+  }, [messageList, wsWordList.current.length, isChatOpen])
 
   // const isJSON = (str) => {
   //   try {      
@@ -492,6 +493,7 @@ const AppId = () => {
         key_features: keyFeatures.current,
         best_use: bestUse.current,
         surfaceF: surface.current,
+        showInChat: true
       })
       setMessageList([...messageListLocal])
       // if (productList.current.length > 0) setChatMode(CHAT_MODE.MAXIFIED)
@@ -559,7 +561,7 @@ const AppId = () => {
         background: "#212529"
       }}>
         <div >
-          <img src="https://apid.duckdns.org/apid/img/logo.png" height={20} width={80} alt='' style={{filter: "invert(1)"}} />
+          <img src="https://apid.duckdns.org/apid/img/logo.png" height={20} width={80} alt='' style={{ filter: "invert(1)" }} />
         </div>
         <div>
           {/* {chatMode == CHAT_MODE.MAXIFIED ?
@@ -567,7 +569,7 @@ const AppId = () => {
             :
             <i role="button" className="fa-solid fa-maximize me-2" onClick={() => setChatMode(CHAT_MODE.MAXIFIED)} />
           } */}
-          <i role="button" className="fa fa-times" style={{ color: "#fff" }} aria-hidden="true" onClick={() => onHideChat()}></i>
+          <i role="button" className="fa fa-times" style={{ color: "#fff" }} aria-hidden="true" onClick={() => setIsChatOpen(!isChatOpen)}></i>
         </div>
       </div>
       {/* <div style={{
@@ -591,7 +593,7 @@ const AppId = () => {
           </div>
           <p style={{ margin: 0 }}>Hi! I'm your smart sales assistant, here to help and guide you through our store. Running shoes are our speciality. How can I assist you today?</p>
         </div>
-        {messageList.map((item, idx) =>
+        {messageList.filter(item => item.showInChat).map((item, idx) =>
           <div key={idx} style={{
             background: item.author.toUpperCase() === AUTHOR.ME ? "#4286f4" : "#eef2f3",
             color: item.author.toUpperCase() === AUTHOR.ME ? "#fff" : "#000",
@@ -614,17 +616,17 @@ const AppId = () => {
               marginTop: 5,
               marginBottom: 5
             }}><MediaRederingComponent type={"product"} mediaArrayElements={item.product_list} onClick={handleMediaVisited} /></div>}
-           
+
             {item.best_use && item.best_use.length > 0 && <div style={{
               marginTop: 5,
               marginBottom: 5
             }}><MediaRederingComponent type={"list"} mediaArrayElements={item.best_use} onClick={{}} /></div>}
-            
+
             {item.surface && item.surface.length > 0 && <div style={{
               marginTop: 5,
               marginBottom: 5
             }}><MediaRederingComponent type={"list"} mediaArrayElements={item.surface} onClick={{}} /></div>}
-            
+
             {item.key_features && item.key_features.length > 0 && <div style={{
               marginTop: 5,
               marginBottom: 5
