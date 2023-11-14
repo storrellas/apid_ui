@@ -1,8 +1,14 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css');
 
+
+#apid {
+  position: relative;
+  z-index: 9999;
+}
+
 /* Input msg */
-.input-msg-container{
+.input-msg-container {
   height: 10%;
   border: 1px solid #999;
   border-radius: 10px;
@@ -10,17 +16,19 @@
   padding: 0.2em 0.5em;
 }
 
-.input-msg{
+.input-msg {
   flex-grow: 1;
   border: 0;
   height: 90%;
   width: 95%;
 }
-.input-msg:focus-visible{
+
+.input-msg:focus-visible {
   border: 0px;
   outline: none;
 }
-.input-msg-enter{
+
+.input-msg-enter {
   width: 40px;
   height: 80%;
   font-size: 30px;
@@ -32,36 +40,40 @@
   width: 0.5em;
 
 }
+
 .rcv-msg-container::-webkit-scrollbar-track {
   color: green;
   background-color: #DDD;
   border-radius: 10px;
 }
+
 .rcv-msg-container::-webkit-scrollbar-thumb {
-  background-color: darkgrey;  
+  background-color: darkgrey;
   border-radius: 10px;
 }
 
 .spinner {
   animation: spin infinite 5s linear;
 }
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-.chat-icon{
+.chat-icon {
   position: fixed;
   bottom: 20px;
-  right: 20px; 
+  right: 20px;
   font-size: 40px;
 }
 
-.chat-container{
+.chat-container {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -71,7 +83,7 @@
   border: 1px solid #999;
 }
 
-.chat-container-maxified{
+.chat-container-maxified {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -83,28 +95,32 @@
   padding: 1em;
 }
 
-.show-chat{
+.show-chat {
   animation: show-chat-expand 0.3s;
 }
+
 @keyframes show-chat-expand {
   0% {
     width: 0;
     height: 0;
   }
+
   100% {
     width: 400px;
     height: 600px;
   }
 }
 
-.hide-chat{
+.hide-chat {
   animation: hide-chat-shrink 0.3s;
 }
+
 @keyframes hide-chat-shrink {
   0% {
     width: 400px;
     height: 600px;
   }
+
   100% {
     width: 0;
     height: 0;
@@ -127,52 +143,67 @@
 
 
 /* Bootstrap like CSS */
-.appid-w-100{
+.appid-w-100 {
   width: 100%;
 }
-.appid-w-50{
+
+.appid-w-50 {
   width: 50%;
 }
-.appid-d-flex{
+
+.appid-d-flex {
   display: flex;
 }
-.appid-flex-column{
+
+.appid-flex-column {
   flex-direction: column;
 }
-.appid-d-none{
+
+.appid-d-none {
   display: none;
 }
-.appid-align-items-center{
+
+.appid-align-items-center {
   align-items: center;
 }
-.appid-align-items-end{
+
+.appid-align-items-end {
   align-items: end;
 }
-.appid-justify-content-center{
+
+.appid-justify-content-center {
   justify-content: center;
 }
-.appid-justify-content-end{
+
+.appid-justify-content-end {
   justify-content: end;
 }
-.appid-flex-grow-1{
+
+.appid-flex-grow-1 {
   flex-grow: 1;
 }
-.appid-mt-3{
+
+.appid-mt-3 {
   margin-top: 1em;
 }
-.appid-mb-3{
+
+.appid-mb-3 {
   margin-bottom: 1em;
 }
-.appid-text-center{
+
+.appid-text-center {
   text-align: center;
 }
-.appid-text-start{
+
+.appid-text-start {
   text-align: start;
 }
-.appid-text-end{
+
+.appid-text-end {
   text-align: end;
 }
-.appid-pe-2{
+
+.appid-pe-2 {
   padding-right: 1em;
 }
 
@@ -180,11 +211,11 @@
   cursor: pointer;
 }
 
-.appid-invisible{
+.appid-invisible {
   display: none;
 }
 
-.multiline-ellipsis{
+.multiline-ellipsis {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;

@@ -39,6 +39,7 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
                   marginBottom: 10,
                   marginRight: "2%",
                   background: "#fff",
+                  cursor:"pointer",
                   "&:hover": {
                     transform: "scale(-0.2)"
                   }
@@ -52,13 +53,13 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
                     width: "100%"
                   }}>
                     <p style={{
-                      fontWeight: 700,
+                      fontWeight: 500,
                       margin: 0,
                       marginBottom: 2,
-                      fontSize: 14,
+                      fontSize: 10,
                       flex: 1
                     }}>{ele.title} <span style={{
-                      background: "#f00",
+                      background: "green",
                       padding: "0px 8px",
                       borderRadius: "50px",
                       color: "#fff",
@@ -103,26 +104,14 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
                   }}>
                     <div>
                       {[...Array(Math.floor(ele.stars))].map((item, idx) =>
-                        <i key={idx} style={{color:'#ffd700'}} className='fa-solid fa-star'></i>
+                        <i key={idx} style={{ color: '#ffd700' }} className='fa-solid fa-star'></i>
                       )}
                       {[...Array(5 - Math.floor(ele.stars))].map((item, idx) =>
                         <i key={idx} className='fa-regular fa-star'></i>
                       )}&nbsp;
                       ({Math.floor(ele.stars)}/5)
                     </div>
-                    <div style={{ color: 'black' }}>Colors: {ele.color.map(c => (
-                      <>
-                        <i className='fas fa-circle' style={{
-                          color: c,
-                          fontSize: '1em',
-                          border: "1px solid #000",
-                          borderRadius: "50%",
-                          textAlign:"center",
-                          width: 10,
-                          height: 10,
-                          overflow:'hidden'
-                        }}></i>&nbsp;</>
-                    ))} </div>
+                    <div style={{ color: 'black' }}>Colors: {ele.color.join(",")} </div>
                   </div>
                 </a>
               ))
@@ -140,7 +129,7 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
             fontWeight: 700,
             fontSize: 14,
             textDecoration: "underline"
-          }}>Customer Reviews</p>
+          }}>Customer Comments</p>
           <div style={{
             width: "100%",
             display: "flex",
@@ -178,20 +167,20 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
                       flex: 1
                     }}>
                       <i class="fas fa-user-o"></i> &nbsp;
-                      {ele.title}</p>
+                      {ele.name}</p>
                     <p style={{
                       fontWeight: 700,
                       margin: 0,
                       marginBottom: 2,
                       fontSize: 14
-                    }}>€{ele.price}</p>
+                    }}>{ele.date}</p>
                   </div>
                   <div style={{
                     padding: 5
                   }}>
                     <p style={{
                       margin: 0,
-                    }}>{ele.description}</p>
+                    }}>{ele.comment}</p>
                   </div>
                 </div>
               ))
@@ -200,12 +189,12 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
         </div>
       )
       break;
-
     case "youtube":
       return (
         <div style={{
           marginTop: 5
         }}>
+          {console.log("youtube url found")}
           <p style={{
             fontWeight: 700,
             fontSize: 14,
@@ -220,6 +209,32 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
               width: "250px",
               height: "250px"
             }} />
+          </div>
+        </div>
+      )
+      break;
+
+    case "list":
+      return (
+        <div style={{
+          marginTop: 5
+        }}>
+          {console.log("youtube url found")}
+          <p style={{
+            fontWeight: 700,
+            fontSize: 14,
+            textDecoration: "underline"
+          }}>Best Use</p>
+          <div style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}>
+            <ol>
+              {mediaArrayElements.map(ele => (
+                <li>{ele}</li>
+              ))}
+            </ol>
           </div>
         </div>
       )
@@ -254,6 +269,10 @@ const AppId = () => {
   const messageOngoing = useRef(false)
   const wsWordList = useRef([])
   const productList = useRef(null)
+  const customerComments = useRef(null)
+  const keyFeatures = useRef(null)
+  const bestUse = useRef(null)
+  const surface = useRef(null)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
@@ -328,7 +347,6 @@ const AppId = () => {
     const mylocation = window.location.pathname
     const hash = window.location.hash
 
-    console.log({ mylocation, hash })
     const messageListLocal = [...messageList]
     messageListLocal.push({ author: AUTHOR.ME, message, current_location: `${mylocation}${hash}` })
     setMessageList([...messageListLocal])
@@ -344,11 +362,11 @@ const AppId = () => {
         type: "recommendation",
         attributes: {
           conversation_id: conversationIdRef.current,
-          product_type: message
+          product_type: message,
+          url: `${window.location.href}`
         }
       }
     }
-    // console.log("body ", body)
     sendMessage(JSON.stringify(body))
 
     // // Update sessionStorage
@@ -427,6 +445,7 @@ const AppId = () => {
 
   useEffect(() => {
     if (lastMessage != null) {
+      console.log({ "typeof": typeof (lastMessage), lastMessage: lastMessage.data })
       let lastMessageStr = lastMessage.data.replace(/"/g, "")
       // Check message type
       if (/\[start=.*\]/.test(lastMessageStr) === true) {
@@ -438,8 +457,21 @@ const AppId = () => {
       } else if (/{*}/.test(lastMessage.data)) {
         // Do nothing
         const body = JSON.parse(lastMessage.data)
+        console.log({ body: body })
         if (body.product_list) {
-          productList.current = body.product_list.slice(0, 4)
+          productList.current = body.product_list
+        }
+        if (body.customer_comments) {
+          customerComments.current = body.customer_comments
+        }
+        if (body.key_features) {
+          keyFeatures.current = body.key_features
+        }
+        if (body.best_use) {
+          bestUse.current = body.best_use
+        }
+        if (body.surface) {
+          surface.current = body.surface
         }
       } else {
         // Display messages
@@ -455,7 +487,12 @@ const AppId = () => {
   useEffect(() => {
     if (messageOngoing.current === false && wsWordList.current.length > 0) {
       const messageListLocal = [...messageList]
-      messageListLocal.push({ author: AUTHOR.BOT, name: 'Bot', message: wsWordList.current.join(''), product_list: productList.current })
+      messageListLocal.push({
+        author: AUTHOR.BOT, name: 'Bot', message: wsWordList.current.join(''), product_list: productList.current, customer_comments: customerComments.current,
+        key_features: keyFeatures.current,
+        best_use: bestUse.current,
+        surfaceF: surface.current,
+      })
       setMessageList([...messageListLocal])
       // if (productList.current.length > 0) setChatMode(CHAT_MODE.MAXIFIED)
 
@@ -522,7 +559,7 @@ const AppId = () => {
         background: "#212529"
       }}>
         <div >
-          <img style={{ filter: "invert" }} src="https://apid.duckdns.org/apid/img/logo.png" height={20} width={80} alt='' />
+          <img src="https://apid.duckdns.org/apid/img/logo.png" height={20} width={80} alt='' style={{filter: "invert(1)"}} />
         </div>
         <div>
           {/* {chatMode == CHAT_MODE.MAXIFIED ?
@@ -577,6 +614,21 @@ const AppId = () => {
               marginTop: 5,
               marginBottom: 5
             }}><MediaRederingComponent type={"product"} mediaArrayElements={item.product_list} onClick={handleMediaVisited} /></div>}
+           
+            {item.best_use && item.best_use.length > 0 && <div style={{
+              marginTop: 5,
+              marginBottom: 5
+            }}><MediaRederingComponent type={"list"} mediaArrayElements={item.best_use} onClick={{}} /></div>}
+            
+            {item.surface && item.surface.length > 0 && <div style={{
+              marginTop: 5,
+              marginBottom: 5
+            }}><MediaRederingComponent type={"list"} mediaArrayElements={item.surface} onClick={{}} /></div>}
+            
+            {item.key_features && item.key_features.length > 0 && <div style={{
+              marginTop: 5,
+              marginBottom: 5
+            }}><MediaRederingComponent type={"list"} mediaArrayElements={item.key_features} onClick={{}} /></div>}
 
 
             {item.customer_review && item.customer_review.length > 0 && <div style={{
@@ -597,7 +649,7 @@ const AppId = () => {
             padding: "10px 15px",
             borderRadius: 10,
             maxWidth: "80%",
-            minWidth: "min-content",
+            minWidth: "fit-content",
             width: "fit-content",
             marginLeft: "inherit",
           }}>
