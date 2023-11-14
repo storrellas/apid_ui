@@ -10,6 +10,7 @@ const CHAT_MODE = { MINIFIED: 'MINIFIED', STANDARD: 'STANDARD', MAXIFIED: 'MAXIF
 
 
 const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
+  console.log({type})
   switch (type) {
     case "product":
       return (
@@ -83,7 +84,7 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
                     }}>
                       <p style={{
                         margin: 0,
-                      }}>{ele.description.substring(0, 125)}...</p>
+                      }}>{ele.description?.substring(0, 125)}...</p>
                     </div>
 
                     <div style={{
@@ -205,10 +206,7 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
             display: "flex",
             flexDirection: "column",
           }}>
-            <iframe src={mediaArrayElements} alt={"Video URl"} style={{
-              width: "250px",
-              height: "250px"
-            }} />
+           <iframe width="300" height="200" src={mediaArrayElements} title="Hoka Challenger Atr 7 SKU: 9818112" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           </div>
         </div>
       )
@@ -271,6 +269,7 @@ const AppId = () => {
   const keyFeatures = useRef(null)
   const bestUse = useRef(null)
   const surface = useRef(null)
+  const youtubeUrl = useRef(null)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
@@ -474,6 +473,9 @@ const AppId = () => {
         if (body.surface) {
           surface.current = body.surface
         }
+        if (body.youtube_url) {
+          youtubeUrl.current = body.youtube_url
+        }
       } else {
         // Display messages
         if (lastMessageStr.includes('\\n')) lastMessageStr = "<br></br>";
@@ -493,6 +495,7 @@ const AppId = () => {
         key_features: keyFeatures.current,
         best_use: bestUse.current,
         surfaceF: surface.current,
+        youtube_url: youtubeUrl.current,
         showInChat: true
       })
       setMessageList([...messageListLocal])
