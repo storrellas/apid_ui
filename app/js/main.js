@@ -9,8 +9,8 @@ const AUTHOR = { ME: 'ME', BOT: 'BOT' }
 const CHAT_MODE = { MINIFIED: 'MINIFIED', STANDARD: 'STANDARD', MAXIFIED: 'MAXIFIED' }
 
 
-const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
-  console.log({type})
+const MediaRederingComponent = ({ type, mediaArrayElements, onClick, setCheckout, title }) => {
+  console.log({ type })
   switch (type) {
     case "product":
       return (
@@ -121,6 +121,118 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
         </div>
       )
       break;
+    case "products_recommended":
+      return (
+        <div>
+          <p style={{
+            fontWeight: 700,
+            fontSize: 14,
+            textDecoration: "underline"
+          }}>Recommnded Products</p>
+          <div style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+          }}>
+
+            {mediaArrayElements.length > 0 ?
+              mediaArrayElements.map(ele => (
+                <div style={{
+                  display: "flex",
+                  color: "inherit",
+                  textDecoration: "none",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  width: "30%",
+                  boxShadow: "0 0 0 1px black",
+                  marginBottom: 10,
+                  marginRight: "1%",
+                  background: "#fff",
+                  cursor: "pointer",
+                  "&:hover": {
+                    transform: "scale(-0.2)"
+                  }
+                }}>
+                  <a onClick={() => onClick({ url: ele.product_page_url })} style={{
+                    display: "flex",
+                    color: "inherit",
+                    textDecoration: "none",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    // width: "30%",
+                    // boxShadow: "0 0 0 1px black",
+                    marginBottom: 10,
+                    marginRight: "1%",
+                    background: "#fff",
+                    cursor: "pointer",
+                    "&:hover": {
+                      transform: "scale(-0.2)"
+                    }
+                  }}>
+                    <div style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "start",
+                      justifyContent: "space-between",
+                      padding: 5,
+                      width: "100%"
+                    }}>
+                      <p style={{
+                        fontWeight: 700,
+                        margin: 0,
+                        marginBottom: 2,
+                        fontSize: 14,
+                        flex: 1
+                      }}>{ele.title} </p>
+                      {ele.discount && <span style={{
+                        background: "green",
+                        padding: "0px 8px",
+                        borderRadius: "50px",
+                        color: "#fff",
+                        fontWeight: 500
+                      }}>{ele.discount}</span>}
+                      <p style={{
+                        fontWeight: 700,
+                        margin: 0,
+                        marginBottom: 2,
+                        fontSize: 14
+                      }}>€{ele.price}</p>
+                    </div>
+                    <div style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}>
+
+                      <div style={{
+                        padding: 5
+                      }}>
+                        <img src={ele.image_url ? ele.image_url : ""} style={{ width: "100px" }} alt='Product Image ' />
+                      </div>
+                    </div>
+                  </a>
+                  <div style={{
+                    paddingBottom: 15
+                  }}>
+                    <a onClick={() => setCheckout(true)} style={{
+                      padding: "5px 15px",
+                      textDecoration: "none",
+                      background: "#1877F2",
+                      color: "#fff",
+                      borderRadius: "50px",
+                      fontWeight: 600,
+                    }}>
+                      Add to basket
+                    </a>
+                  </div>
+                </div>
+              ))
+              : ""}
+          </div>
+        </div>
+      )
+      break;
     case "customer_review":
       return (
         <div style={{
@@ -206,8 +318,40 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
             display: "flex",
             flexDirection: "column",
           }}>
-           <iframe width="300" height="200" src={mediaArrayElements} title="Hoka Challenger Atr 7 SKU: 9818112" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <iframe width="300" height="200" src={mediaArrayElements} title="Hoka Challenger Atr 7 SKU: 9818112" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           </div>
+        </div>
+      )
+      break;
+    case "cart_image":
+      return (
+        <div style={{
+          marginTop: 5
+        }}>
+          <div style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}>
+            <img onClick={() => setCheckout(true)} src={mediaArrayElements} alt='Cart Image' width={"100%"} />
+          </div>
+        </div>
+      )
+
+    case "recommended_tours":
+      return (
+        <div style={{
+          marginTop: 5
+        }}>
+          {mediaArrayElements.map(m => (
+            <div style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}>
+              <img src={m} alt='Cart Image' width={"100%"} />
+            </div>
+          ))}
         </div>
       )
       break;
@@ -222,7 +366,7 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick }) => {
             fontWeight: 700,
             fontSize: 14,
             textDecoration: "underline"
-          }}>Best Use</p>
+          }}>{title}</p>
           <div style={{
             width: "100%",
             display: "flex",
@@ -253,9 +397,18 @@ const AppId = () => {
   const [hasMedia, setHasMedia] = React.useState(false)
   const [isChatOpen, setIsChatOpen] = React.useState(false)
 
+  const [showCheckOutImage, setShowCheckOutImage] = React.useState(false)
+
   const handleMediaVisited = async ({ url }) => {
     await wsMessage(`I am vieweing Product: ${url} `, false)
     window.location.assign(url)
+  }
+
+  const setCheckout = async (checkout) => {
+    if (checkout) {
+      await wsMessage("cart_image", false)
+    }
+    // await wsMessage(`${url} `)
   }
 
   const conversationIdRef = useRef(uuidv4())
@@ -270,6 +423,9 @@ const AppId = () => {
   const bestUse = useRef(null)
   const surface = useRef(null)
   const youtubeUrl = useRef(null)
+  const productsRecommended = useRef(null)
+  const cartImageLink = useRef(null)
+  const recommendedTours = useRef(null)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
@@ -306,6 +462,7 @@ const AppId = () => {
       }
     }
   }, [messageList])
+
 
   // const apiMessage = async (message) => {
   //   const messageListLocal = [...messageList]
@@ -361,6 +518,7 @@ const AppId = () => {
           conversation_id: conversationIdRef.current,
           product_type: message,
           url: `${window.location.href}`
+          // url: `https://runningwarehouse.duckdns.org/Brooks_Catamount_2/descpage-BRCA2M3.html`
         }
       }
     }
@@ -426,12 +584,12 @@ const AppId = () => {
 
   useEffect(() => {
     // console.log({conversationContainer})
-   if(isChatOpen){
-    const scrollHeight = conversationContainer.current.scrollHeight;
-    const height = conversationContainer.current.clientHeight;
-    const maxScrollTop = scrollHeight - height;
-    conversationContainer.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-   }
+    if (isChatOpen) {
+      const scrollHeight = conversationContainer.current.scrollHeight;
+      const height = conversationContainer.current.clientHeight;
+      const maxScrollTop = scrollHeight - height;
+      conversationContainer.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    }
   }, [messageList, wsWordList.current.length, isChatOpen])
 
   // const isJSON = (str) => {
@@ -449,9 +607,11 @@ const AppId = () => {
       let lastMessageStr = lastMessage.data.replace(/"/g, "")
       // Check message type
       if (/\[start=.*\]/.test(lastMessageStr) === true) {
+        console.log("I am in start block")
         messageOngoing.current = true
         wsWordList.current.length = 0
       } else if (/\[end=.*\]/.test(lastMessageStr) === true) {
+        console.log("I am in end block")
         messageOngoing.current = false
         setLoading(false)
       } else if (/{*}/.test(lastMessage.data)) {
@@ -476,6 +636,16 @@ const AppId = () => {
         if (body.youtube_url) {
           youtubeUrl.current = body.youtube_url
         }
+        if (body.products_recommended) {
+          productsRecommended.current = body.products_recommended
+        }
+        if (body.image_link) {
+          cartImageLink.current = body.image_link
+        }
+        if (body.recommended_tours) {
+          recommendedTours.current = body.recommended_tours
+        }
+        setLoading(false)
       } else {
         // Display messages
         if (lastMessageStr.includes('\\n')) lastMessageStr = "<br></br>";
@@ -488,14 +658,18 @@ const AppId = () => {
   }, [lastMessage]);
 
   useEffect(() => {
+    console.log("Asad", cartImageLink.current, " ", wsWordList.current.length)
     if (messageOngoing.current === false && wsWordList.current.length > 0) {
       const messageListLocal = [...messageList]
       messageListLocal.push({
         author: AUTHOR.BOT, name: 'Bot', message: wsWordList.current.join(''), product_list: productList.current, customer_comments: customerComments.current,
         key_features: keyFeatures.current,
         best_use: bestUse.current,
-        surfaceF: surface.current,
+        surface: surface.current,
         youtube_url: youtubeUrl.current,
+        products_recommended: productsRecommended.current,
+        image_link: cartImageLink.current,
+        recommended_tours: recommendedTours.current,
         showInChat: true
       })
       setMessageList([...messageListLocal])
@@ -504,6 +678,24 @@ const AppId = () => {
       // Update sessionStorage
       refreshSessionStorage(messageListLocal)
       wsWordList.current.length = 0
+    } else if (messageOngoing.current === false && (cartImageLink.current || recommendedTours.current)) {
+      const messageListLocal = [...messageList]
+      messageListLocal.push({
+        author: AUTHOR.BOT, name: 'Bot', message: null, product_list: productList.current, customer_comments: customerComments.current,
+        key_features: keyFeatures.current,
+        best_use: bestUse.current,
+        surface: surface.current,
+        youtube_url: youtubeUrl.current,
+        products_recommended: productsRecommended.current,
+        image_link: cartImageLink.current,
+        recommended_tours: recommendedTours.current,
+        showInChat: true
+      })
+      setMessageList([...messageListLocal])
+      // if (productList.current.length > 0) setChatMode(CHAT_MODE.MAXIFIED)
+
+      // Update sessionStorage
+      refreshSessionStorage(messageListLocal)
     }
   }, [loading])
 
@@ -597,24 +789,25 @@ const AppId = () => {
           <p style={{ margin: 0 }}>Hi! I'm your smart sales assistant, here to help and guide you through our store. Running shoes are our speciality. How can I assist you today?</p>
         </div>
         {messageList.filter(item => item.showInChat).map((item, idx) =>
-          <div key={idx} style={{
-            background: item.author.toUpperCase() === AUTHOR.ME ? "#4286f4" : "#eef2f3",
-            color: item.author.toUpperCase() === AUTHOR.ME ? "#fff" : "#000",
-            padding: "10px 15px",
-            borderRadius: 10,
-            maxWidth: "90%",
-            minWidth: "fit-content",
-            width: "fit-content",
-            marginLeft: item.author.toUpperCase() === AUTHOR.ME ? "auto" : "inherit",
-            fontSize: 12,
-          }}>
-            <div style={{ marginBottom: 5 }} className={`w-100 `}>
-              <b>{item.author.charAt(0).toUpperCase() + item.author.slice(1).toLowerCase()} says:</b>
+          <>
+            <div key={idx} style={{
+              background: item.author.toUpperCase() === AUTHOR.ME ? "#4286f4" : "#eef2f3",
+              color: item.author.toUpperCase() === AUTHOR.ME ? "#fff" : "#000",
+              padding: "10px 15px",
+              borderRadius: 10,
+              maxWidth: "90%",
+              minWidth: "fit-content",
+              width: "fit-content",
+              marginLeft: item.author.toUpperCase() === AUTHOR.ME ? "auto" : "inherit",
+              fontSize: 12,
+            }}>
+              <div style={{ marginBottom: 5 }} className={`w-100 `}>
+                <b>{item.author.charAt(0).toUpperCase() + item.author.slice(1).toLowerCase()} says:</b>
+              </div>
+              <div style={{ textAlign: 'justify' }} key={idx}>
+                <div dangerouslySetInnerHTML={{ __html: item.message }} />
+              </div>
             </div>
-            <div style={{ textAlign: 'justify' }} key={idx}>
-              <div dangerouslySetInnerHTML={{ __html: item.message }} />
-            </div>
-
             {item.product_list && item.product_list.length > 0 && <div style={{
               marginTop: 5,
               marginBottom: 5
@@ -623,23 +816,23 @@ const AppId = () => {
             {item.best_use && item.best_use.length > 0 && <div style={{
               marginTop: 5,
               marginBottom: 5
-            }}><MediaRederingComponent type={"list"} mediaArrayElements={item.best_use} onClick={{}} /></div>}
+            }}><MediaRederingComponent type={"list"} title="Best Use" mediaArrayElements={item.best_use} onClick={{}} /></div>}
 
             {item.surface && item.surface.length > 0 && <div style={{
               marginTop: 5,
               marginBottom: 5
-            }}><MediaRederingComponent type={"list"} mediaArrayElements={item.surface} onClick={{}} /></div>}
+            }}><MediaRederingComponent type={"list"} title="Surface" mediaArrayElements={item.surface} onClick={{}} /></div>}
 
             {item.key_features && item.key_features.length > 0 && <div style={{
               marginTop: 5,
               marginBottom: 5
-            }}><MediaRederingComponent type={"list"} mediaArrayElements={item.key_features} onClick={{}} /></div>}
+            }}><MediaRederingComponent type={"list"} title="Key Features" mediaArrayElements={item.key_features} onClick={{}} /></div>}
 
 
-            {item.customer_review && item.customer_review.length > 0 && <div style={{
+            {item.customer_comments && item.customer_comments.length > 0 && <div style={{
               marginTop: 5,
               marginBottom: 5
-            }}><MediaRederingComponent type={"customer_review"} mediaArrayElements={item.customer_review} onClick={handleMediaVisited} /></div>}
+            }}><MediaRederingComponent type={"customer_review"} mediaArrayElements={item.customer_comments} onClick={handleMediaVisited} /></div>}
 
 
             {item.youtube_url && <div style={{
@@ -647,7 +840,44 @@ const AppId = () => {
               marginBottom: 5
             }}><MediaRederingComponent type={"youtube"} mediaArrayElements={item.youtube_url} onClick={handleMediaVisited} /></div>}
 
-          </div>)}
+            {item.products_recommended && item.products_recommended.length > 0 && <div style={{
+              marginTop: 5,
+              marginBottom: 5
+            }}><MediaRederingComponent type={"products_recommended"} mediaArrayElements={item.products_recommended} onClick={handleMediaVisited} setCheckout={setCheckout} /></div>}
+
+            {item.image_link && <div style={{
+              marginTop: 5,
+              marginBottom: 5
+            }}><MediaRederingComponent type={"cart_image"} mediaArrayElements={item.image_link} onClick={handleMediaVisited} setCheckout={async (check) => {
+              try {
+                if (check) {
+                  await wsMessage("recommended_tours", false)
+                }
+              } catch (err) {
+                console.log(err)
+              }
+            }} /></div>}
+
+            {item.recommended_tours && item.recommended_tours.length > 0 && <div style={{
+              marginTop: 5,
+              marginBottom: 5
+            }}><MediaRederingComponent type={"recommended_tours"} mediaArrayElements={item.recommended_tours} onClick={handleMediaVisited} setCheckout={async () => {
+
+            }} /></div>}</>
+
+        )}
+        {showCheckOutImage && <div style={{
+          background: item.author.toUpperCase() === AUTHOR.ME ? "#4286f4" : "#eef2f3",
+          color: item.author.toUpperCase() === AUTHOR.ME ? "#fff" : "#000",
+          padding: "10px 15px",
+          borderRadius: 10,
+          maxWidth: "90%",
+          minWidth: "fit-content",
+          width: "fit-content",
+          marginLeft: item.author.toUpperCase() === AUTHOR.ME ? "auto" : "inherit",
+          fontSize: 12,
+        }}>
+          <img src="https://assets-global.website-files.com/605826c62e8de87de744596e/622b2227ad990d96b624fda6_gDtOBigUgnYBqCX6RkRU7PGBWt0DyTUWX5rwJNofy1C61OLiF-mueVP0KhNxKpC3u6JxUscqtQpWvuAU6C4qZexw41rs44Afhpu87AT1aDpQC2C9VJFPw8rX-Rg8EuZIGySGE5oB.jpeg" alt='checkout image' /></div>}
         {loading && wsWordList.current.length > 0 ?
           <div style={{
             background: "#eef2f3",
