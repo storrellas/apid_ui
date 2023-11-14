@@ -318,7 +318,7 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick, setCheckout
             display: "flex",
             flexDirection: "column",
           }}>
-            <iframe width="300" height="200" src={mediaArrayElements} title="Hoka Challenger Atr 7 SKU: 9818112" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <iframe width="300" height="200" src={mediaArrayElements} title="Hoka Challenger Atr 7 SKU: 9818112" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullScreen></iframe>
           </div>
         </div>
       )
@@ -332,6 +332,7 @@ const MediaRederingComponent = ({ type, mediaArrayElements, onClick, setCheckout
             width: "100%",
             display: "flex",
             flexDirection: "column",
+            cursor: "pointer"
           }}>
             <img onClick={() => setCheckout(true)} src={mediaArrayElements} alt='Cart Image' width={"100%"} />
           </div>
@@ -517,8 +518,8 @@ const AppId = () => {
         attributes: {
           conversation_id: conversationIdRef.current,
           product_type: message,
-          url: `${window.location.href}`
-          // url: `https://runningwarehouse.duckdns.org/Brooks_Catamount_2/descpage-BRCA2M3.html`
+          // url: `${window.location.href}`
+          url: `https://runningwarehouse.duckdns.org/Brooks_Catamount_2/descpage-BRCA2M3.html`
         }
       }
     }
@@ -742,8 +743,8 @@ const AppId = () => {
 
 
     {isChatOpen && <section className={'show-chat appid-d-flex appid-flex-column chat-container'} style={{
-      maxWidth: hasMedia ? 700 : 300,
-      width: hasMedia ? 700 : 300,
+      maxWidth: hasMedia ? 700 : 400,
+      width: hasMedia ? 700 : 400,
       minHeight: hasMedia ? 700 : 300,
       transform: hasMedia ? "width .3s ease" : "inherit"
     }}>
@@ -753,10 +754,11 @@ const AppId = () => {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        background: "#212529"
+        background: "#fff",
+        borderBottom: "1px solid #000"
       }}>
         <div >
-          <img src="https://apid.duckdns.org/apid/img/logo.png" height={20} width={80} alt='' style={{ filter: "invert(1)" }} />
+          <img src="https://apid.duckdns.org/apid/img/Apid-1_UI_UX.jpg" height={20} width={80} alt='' />
         </div>
         <div>
           {/* {chatMode == CHAT_MODE.MAXIFIED ?
@@ -764,7 +766,7 @@ const AppId = () => {
             :
             <i role="button" className="fa-solid fa-maximize me-2" onClick={() => setChatMode(CHAT_MODE.MAXIFIED)} />
           } */}
-          <i role="button" className="fa fa-times" style={{ color: "#fff" }} aria-hidden="true" onClick={() => setIsChatOpen(!isChatOpen)}></i>
+          <i role="button" className="fa fa-times" aria-hidden="true" onClick={() => setIsChatOpen(!isChatOpen)}></i>
         </div>
       </div>
       {/* <div style={{
@@ -789,13 +791,15 @@ const AppId = () => {
           <p style={{ margin: 0 }}>Hi! I'm your smart sales assistant, here to help and guide you through our store. Running shoes are our speciality. How can I assist you today?</p>
         </div>
         {messageList.filter(item => item.showInChat).map((item, idx) =>
-          <>
+          <div style={{
+            padding: "10px 15px",
+          }}>
             <div key={idx} style={{
               background: item.author.toUpperCase() === AUTHOR.ME ? "#4286f4" : "#eef2f3",
               color: item.author.toUpperCase() === AUTHOR.ME ? "#fff" : "#000",
               padding: "10px 15px",
               borderRadius: 10,
-              maxWidth: "90%",
+              maxWidth: "80%",
               minWidth: "fit-content",
               width: "fit-content",
               marginLeft: item.author.toUpperCase() === AUTHOR.ME ? "auto" : "inherit",
@@ -807,63 +811,64 @@ const AppId = () => {
               <div style={{ textAlign: 'justify' }} key={idx}>
                 <div dangerouslySetInnerHTML={{ __html: item.message }} />
               </div>
-            </div>
-            {item.product_list && item.product_list.length > 0 && <div style={{
-              marginTop: 5,
-              marginBottom: 5
-            }}><MediaRederingComponent type={"product"} mediaArrayElements={item.product_list} onClick={handleMediaVisited} /></div>}
+              {item.product_list && item.product_list.length > 0 && <div style={{
+                marginTop: 5,
+                marginBottom: 5
+              }}><MediaRederingComponent type={"product"} mediaArrayElements={item.product_list} onClick={handleMediaVisited} /></div>}
 
-            {item.best_use && item.best_use.length > 0 && <div style={{
-              marginTop: 5,
-              marginBottom: 5
-            }}><MediaRederingComponent type={"list"} title="Best Use" mediaArrayElements={item.best_use} onClick={{}} /></div>}
+              {item.best_use && item.best_use.length > 0 && <div style={{
+                marginTop: 5,
+                marginBottom: 5
+              }}><MediaRederingComponent type={"list"} title="Best Use" mediaArrayElements={item.best_use} onClick={{}} /></div>}
 
-            {item.surface && item.surface.length > 0 && <div style={{
-              marginTop: 5,
-              marginBottom: 5
-            }}><MediaRederingComponent type={"list"} title="Surface" mediaArrayElements={item.surface} onClick={{}} /></div>}
+              {item.surface && item.surface.length > 0 && <div style={{
+                marginTop: 5,
+                marginBottom: 5
+              }}><MediaRederingComponent type={"list"} title="Surface" mediaArrayElements={item.surface} onClick={{}} /></div>}
 
-            {item.key_features && item.key_features.length > 0 && <div style={{
-              marginTop: 5,
-              marginBottom: 5
-            }}><MediaRederingComponent type={"list"} title="Key Features" mediaArrayElements={item.key_features} onClick={{}} /></div>}
-
-
-            {item.customer_comments && item.customer_comments.length > 0 && <div style={{
-              marginTop: 5,
-              marginBottom: 5
-            }}><MediaRederingComponent type={"customer_review"} mediaArrayElements={item.customer_comments} onClick={handleMediaVisited} /></div>}
+              {item.key_features && item.key_features.length > 0 && <div style={{
+                marginTop: 5,
+                marginBottom: 5
+              }}><MediaRederingComponent type={"list"} title="Key Features" mediaArrayElements={item.key_features} onClick={{}} /></div>}
 
 
-            {item.youtube_url && <div style={{
-              marginTop: 5,
-              marginBottom: 5
-            }}><MediaRederingComponent type={"youtube"} mediaArrayElements={item.youtube_url} onClick={handleMediaVisited} /></div>}
+              {item.customer_comments && item.customer_comments.length > 0 && <div style={{
+                marginTop: 5,
+                marginBottom: 5
+              }}><MediaRederingComponent type={"customer_review"} mediaArrayElements={item.customer_comments} onClick={handleMediaVisited} /></div>}
 
-            {item.products_recommended && item.products_recommended.length > 0 && <div style={{
-              marginTop: 5,
-              marginBottom: 5
-            }}><MediaRederingComponent type={"products_recommended"} mediaArrayElements={item.products_recommended} onClick={handleMediaVisited} setCheckout={setCheckout} /></div>}
 
-            {item.image_link && <div style={{
-              marginTop: 5,
-              marginBottom: 5
-            }}><MediaRederingComponent type={"cart_image"} mediaArrayElements={item.image_link} onClick={handleMediaVisited} setCheckout={async (check) => {
-              try {
-                if (check) {
-                  await wsMessage("recommended_tours", false)
+              {item.youtube_url && <div style={{
+                marginTop: 5,
+                marginBottom: 5
+              }}><MediaRederingComponent type={"youtube"} mediaArrayElements={item.youtube_url} onClick={handleMediaVisited} /></div>}
+
+              {item.products_recommended && item.products_recommended.length > 0 && <div style={{
+                marginTop: 5,
+                marginBottom: 5
+              }}><MediaRederingComponent type={"products_recommended"} mediaArrayElements={item.products_recommended} onClick={handleMediaVisited} setCheckout={setCheckout} /></div>}
+
+              {item.image_link && <div style={{
+                marginTop: 5,
+                marginBottom: 5
+              }}><MediaRederingComponent type={"cart_image"} mediaArrayElements={item.image_link} onClick={handleMediaVisited} setCheckout={async (check) => {
+                try {
+                  if (check) {
+                    await wsMessage("recommended_tours", false)
+                  }
+                } catch (err) {
+                  console.log(err)
                 }
-              } catch (err) {
-                console.log(err)
-              }
-            }} /></div>}
+              }} /></div>}
 
-            {item.recommended_tours && item.recommended_tours.length > 0 && <div style={{
-              marginTop: 5,
-              marginBottom: 5
-            }}><MediaRederingComponent type={"recommended_tours"} mediaArrayElements={item.recommended_tours} onClick={handleMediaVisited} setCheckout={async () => {
+              {item.recommended_tours && item.recommended_tours.length > 0 && <div style={{
+                marginTop: 5,
+                marginBottom: 5
+              }}><MediaRederingComponent type={"recommended_tours"} mediaArrayElements={item.recommended_tours} onClick={handleMediaVisited} setCheckout={async () => {
 
-            }} /></div>}</>
+              }} /></div>}
+            </div>
+          </div>
 
         )}
         {showCheckOutImage && <div style={{
@@ -909,9 +914,9 @@ const AppId = () => {
         padding: "10px 5px",
         borderTop: "1px solid #ccc"
       }}>
-        <input value={message} disabled={loading}
+        <input autoFocus={!loading} value={message} readOnly={loading}
           type="text"
-          placeholder='Feel Free to ask me anything!'
+          placeholder='Ask me anything!'
           style={{
             flexGrow: 1,
             marginRight: "5px"
@@ -921,19 +926,14 @@ const AppId = () => {
 
         <div className="appid-d-flex " style={{
           borderRadius: '50%',
-          border: "1px solid #777",
           padding: 8,
-          background: "rgb(33, 37, 41)",
           width: 40,
           height: 40,
           display: "flex",
           alignItems: "center",
           justifyContent: "center"
         }} role='button' onClick={() => onClickSendMessage()}>
-          <i className="fa fa-send" aria-hidden="true" style={{
-            fontSize: "1.1em",
-            color: "#fff"
-          }} ></i>
+          <img src="https://apid.duckdns.org/apid/img/botarrow.png" width={"100%"} />
         </div>
 
       </div>
