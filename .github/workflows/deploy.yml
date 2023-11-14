@@ -1,0 +1,51 @@
+name: deploy
+on:
+  # pull_request:
+  #   branches: [develop]
+  #   # NOTE: Uncomment this to run workflow when merge closes
+  #   # types: [opened, synchronize, reopened, closed]
+  #   types: [opened, synchronize, reopened, closed]
+  # # workflow_dispatch:
+  push:
+    branches:
+      - main
+
+# # See https://docs.github.com/en/actions/learn-github-actions/variables
+# env:
+#   JWT_SECRET: H5A2zP9sM3N5PdmN
+#   PROJECT_CODE: 5c5ddf42ea41bb5242a4a3394c6c2669
+
+
+jobs:
+  deploy:    
+    runs-on: ubuntu-latest
+    name: deploy
+    steps:       
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 16
+
+      - name: Git checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: List files
+        working-directory: ./dona-cypress
+        run: ls -la
+        shell: bash  
+
+
+      # - name: Check all tests are running
+      #   working-directory: ./dona-cypress
+      #   run: bash -x
+      #   shell: bash  
+      # - name: Deploy to Staging server
+      #   uses: easingthemes/ssh-deploy@main
+      #   with:
+      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     ARGS: "-rlgoDzvc -i"
+      #     REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+      #     REMOTE_USER: ${{ secrets.REMOTE_USER }}
+      #     TARGET: "/home/ubuntu/workspace/apid_ui_github"
+      #     SCRIPT_BEFORE: |
+      #       cd ~/workspace/apid_ui_github/
+      #       bash -x deploy.sh
