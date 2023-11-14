@@ -1,5 +1,7 @@
 #!/bin/bash
-
+cd "$(dirname "$0")"
+git pull origin master
+npm run compile
 # Upload to server
 echo "------------------"
 echo "Deploying to apid.duckdns.org ..."
