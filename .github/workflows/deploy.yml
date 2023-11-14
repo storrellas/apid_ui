@@ -36,9 +36,9 @@ jobs:
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: apid.duckdns.org
-          username: ubuntu
-          password: apid2023
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
           source: "public/*"
           target: /home/ubuntu/workspace/apid_ui
 
