@@ -33,14 +33,14 @@ jobs:
         shell: bash
         
 
-    - name: copy file via ssh password
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.REMOTE_HOST }}
-        username: ${{ secrets.REMOTE_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "public/*"
-        target: /home/ubuntu/workspace/apid_ui
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "public/*"
+          target: /home/ubuntu/workspace/apid_ui
 
       # - name: Check all tests are running
       #   working-directory: ./dona-cypress
